@@ -1,0 +1,29 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto+Slab&display=swap");
+
+html {
+  font-family: "Roboto Slab", "serif";
+  font-size: 2rem;
+}
+
+.wrapper {
+  display: grid;
+  grid-template-columns:
+    1fr
+    min(65ch, 100%)
+    1fr;
+}
+
+.wrapper > * {
+  grid-column: 2;
+}
+
+.text {
+  margin-top: 50vh;
+}
+
+.float-away {
+  display: inline-block;
+  transition: transform 600ms, opacity 600ms;
+  transform: translateY(-3ch);
+  opacity: 0;
+}
