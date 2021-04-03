@@ -21,9 +21,13 @@ html {
   margin-top: 50vh;
 }
 
-.float-away {
-  display: inline-block;
-  transition: transform 600ms, opacity 600ms;
-  transform: translateY(-3ch);
-  opacity: 0;
+.typed {
+  transition: opacity 200ms;
+  opacity: .2;
+}
+
+.cursor {
+  /* text-decoration: underline double hotpink; */
+  background-color: yellow;
+  border-radius: 2px;
 }
