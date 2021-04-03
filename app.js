@@ -1,5 +1,6 @@
 import { h, render, Fragment } from "https://cdn.skypack.dev/preact";
 import { useState } from "https://cdn.skypack.dev/preact/hooks";
+import { isValidKeyEvent } from './utils.js'
 
 const text =
   "Hello my dude! What is happening? I really would like to know what it is that you think is happening, because I am confused. Specifically, I am confused about what is happening. Can you help me my dude? Many thanks, Eric.";
@@ -41,17 +42,3 @@ const Text = ({ text }) => {
 };
 
 render(h(Text, { text }), document.getElementById("app"));
-
-function isValidKeyEvent(e) {
-  const modifierPressed = (e) => e.altkey || e.ctrlKey || e.metaKey;
-  const isPrintableCharacter = ({ keyCode }) =>
-    (keyCode > 47 && keyCode < 58) || // numbers
-    keyCode == 32 || // spacebar
-    keyCode == 13 || // return
-    (keyCode > 64 && keyCode < 91) || // letters
-    (keyCode > 95 && keyCode < 112) || // numpad numbers
-    (keyCode > 185 && keyCode < 193) || // ;=,-./`
-    (keyCode > 218 && keyCode < 223); // [\]'
-
-  return !modifierPressed(e) && isPrintableCharacter(e);
-}
