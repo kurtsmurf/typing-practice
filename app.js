@@ -8,11 +8,16 @@ const Characters = ({ text, position }) =>
   h(
     Fragment,
     {},
-    text.split("").map((char) => h("span", {}, char))
+    text.split("").map((char, index) => h("span", { className: index < position ? '.float-away' : '' }, char))
   );
 
 const Text = ({ text }) => {
   const [position, setPosition] = useState(0);
+
+  document.body.onkeydown = () => {
+    console.log(position)
+    setPosition(position + 1)
+  }
 
   return h("div", { className: "text" }, h(Characters, { text, position }));
 };
