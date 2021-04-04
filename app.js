@@ -45,22 +45,7 @@ function stateReducer(state, event) {
   return (stateMachine.states[state] && stateMachine.states[state].on[event]) || state
 }
 
-function Characters({ text, position }) {
-  return h(
-    Fragment,
-    {},
-    text.split("").map((char, index) =>
-      h(
-        "span",
-        {
-          className:
-            index < position ? "typed" : index === position ? "cursor" : "",
-        },
-        char
-      )
-    )
-  );
-}
+render(h(Text, { text }), document.getElementById("app"));
 
 function Text({ text }) {
   const [position, setPosition] = useState(0);
@@ -86,4 +71,19 @@ function Text({ text }) {
   return h("div", { className: "text" }, h(Characters, { text, position }));
 };
 
-render(h(Text, { text }), document.getElementById("app"));
+function Characters({ text, position }) {
+  return h(
+    Fragment,
+    {},
+    text.split("").map((char, index) =>
+      h(
+        "span",
+        {
+          className:
+            index < position ? "typed" : index === position ? "cursor" : "",
+        },
+        char
+      )
+    )
+  );
+}
