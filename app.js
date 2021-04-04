@@ -41,6 +41,10 @@ const stateMachine = {
   }
 }
 
+function stateReducer(state, event) {
+  return (stateMachine.states[state] && stateMachine.states[state].on[event]) || state
+}
+
 function Characters({ text, position }) {
   return h(
     Fragment,
