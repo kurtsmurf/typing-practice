@@ -2,7 +2,6 @@
 
 html {
   font-family: "Roboto Slab", "serif";
-  font-size: 2rem;
 }
 
 /* layout */
@@ -31,7 +30,7 @@ body {
 
 .typed {
   transition: opacity 200ms;
-  opacity: .2;
+  opacity: 0.2;
 }
 
 .cursor {
