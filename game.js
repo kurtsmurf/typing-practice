@@ -19,7 +19,7 @@ const initialState = {
 };
 
 export function useGameReducer() {
-  return useReducer(reducer, initialState)
+  return useReducer(reducer, initialState);
 }
 
 function reducer(state, event) {
