@@ -7,8 +7,8 @@ export const modes = {
 };
 
 export const events = {
-  TYPE_RIGHT: "TYPE_RIGHT",
-  TYPE_WRONG: "TYPE_WRONG",
+  TYPE_CORRECT_KEY: "TYPE_CORRECT_KEY",
+  TYPE_INCORRECT_KEY: "TYPE_INCORRECT_KEY",
   REACH_END: "REACH_END",
   RESET: "RESET",
 };
@@ -37,12 +37,12 @@ function reducer(state, event) {
 
 function playingReducer(state, event) {
   switch (event) {
-    case events.TYPE_RIGHT:
+    case events.TYPE_CORRECT_KEY:
       return {
         ...state,
         position: state.position + 1,
       };
-    case events.TYPE_WRONG:
+    case events.TYPE_INCORRECT_KEY:
       return {
         ...state,
         mode: modes.LOST,

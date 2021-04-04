@@ -12,19 +12,19 @@ function Game({ text }) {
   const isCorrect = (key) => key === text[state.position];
   const isLastPosition = state.position === text.length - 1;
 
-  function play(key) {
+  function type(key) {
     if (isLastPosition && isCorrect(key)) {
       dispatch(events.REACH_END);
     } else if (isCorrect(key)) {
-      dispatch(events.TYPE_RIGHT);
+      dispatch(events.TYPE_CORRECT_KEY);
     } else {
-      dispatch(events.TYPE_WRONG);
+      dispatch(events.TYPE_INCORRECT_KEY);
     }
   }
 
   document.body.onkeydown = function (e) {
     if (isValidKeyEvent(e)) {
-      play(e.key);
+      type(e.key);
     }
   };
 
