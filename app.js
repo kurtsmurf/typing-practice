@@ -41,8 +41,8 @@ const stateMachine = {
   }
 }
 
-const Characters = ({ text, position }) =>
-  h(
+function Characters({ text, position }) {
+  return h(
     Fragment,
     {},
     text.split("").map((char, index) =>
@@ -56,11 +56,12 @@ const Characters = ({ text, position }) =>
       )
     )
   );
+}
 
-const Text = ({ text }) => {
+function Text({ text }) {
   const [position, setPosition] = useState(0);
 
-  const play = (key) => {
+  function play(key) {
     if (position === text.length) {
       alert('Success!')
       setPosition(0);
@@ -72,7 +73,7 @@ const Text = ({ text }) => {
     }
   };
 
-  document.body.onkeydown = (e) => {
+  document.body.onkeydown = function (e) {
     if (isValidKeyEvent(e)) {
       play(e.key);
     }
