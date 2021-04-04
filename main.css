@@ -5,20 +5,24 @@ html {
   font-size: 2rem;
 }
 
+body {
+  height: 100vh;
+  margin: 0;
+}
+
 .wrapper {
-  display: grid;
-  grid-template-columns:
-    1fr
-    min(65ch, 100%)
-    1fr;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 .wrapper > * {
-  grid-column: 2;
-}
-
-.text {
-  margin-top: 50vh;
+  --side-space: 1rem;
+  --double-side-space: calc(var(--side-space) * 2);
+  --max-width: calc(100% - var(--double-side-space));
+  width: min(65ch, var(--max-width));
 }
 
 .typed {
@@ -27,7 +31,6 @@ html {
 }
 
 .cursor {
-  /* text-decoration: underline double hotpink; */
   background-color: yellow;
   border-radius: 2px;
 }
