@@ -25,9 +25,13 @@ const Text = ({ text }) => {
   const [position, setPosition] = useState(0);
 
   const play = (key) => {
-    if (key === text[position]) {
+    if (position === text.length) {
+      alert('Success!')
+      setPosition(0);
+    } else if (key === text[position]) {
       setPosition(position + 1);
     } else {
+      alert('You have failed.')
       setPosition(0);
     }
   };
