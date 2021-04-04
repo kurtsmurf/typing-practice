@@ -33,22 +33,23 @@ function Game({ text }) {
     {
       "data-mode": state.mode,
     },
-    state.mode === modes.LOST &&
-    h(
-      "div",
-      { className: "prompt" },
-      h("strong", {}, "You failed."),
-      h("button", { onClick: () => dispatch(events.RESET) }, "Reset")
-    ),
-    state.mode === modes.WON &&
-    h(
-      "div",
-      { className: "prompt" },
-      h("strong", {}, "You succeeded!"),
-      h("button", { onClick: () => dispatch(events.RESET) }, "Reset")
-    ),
+    h(Prompt, { mode: state.mode, dispatch }),
     h(Text, { text, position: state.position })
   );
+}
+
+function Prompt({ mode, dispatch }) {
+  const displayed = [modes.LOST, modes.WON].includes(mode)
+  const message = mode === modes.LOST ? "You failed." : "You succeeded!"
+  const nbsp = '\u00a0'
+
+  return displayed && h(
+    'div',
+    { className: 'prompt' },
+    h('strong', {}, message),
+    nbsp,
+    h('button', { onClick: () => dispatch(events.RESET) }, 'Reset')
+  )
 }
 
 function Text({ text, position }) {
