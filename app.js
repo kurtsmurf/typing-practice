@@ -5,6 +5,42 @@ import { isValidKeyEvent } from './utils.js'
 const text =
   "Hello my dude! What is happening? I really would like to know what it is that you think is happening, because I am confused. Specifically, I am confused about what is happening. Can you help me my dude? Many thanks, Eric.";
 
+const states = {
+  PLAYING: 'PLAYING',
+  WON: 'WON',
+  LOST: 'LOST',
+}
+
+const events = {
+  TYPE_RIGHT: 'TYPE_RIGHT',
+  TYPE_WRONG: 'TYPE_WRONG',
+  REACH_END: 'REACH_END',
+  RESET: 'RESET',
+}
+
+const stateMachine = {
+  initial: states.PLAYING,
+  states: {
+    [states.PLAYING]: {
+      on: {
+        [events.TYPE_RIGHT]: states.PLAYING,
+        [events.TYPE_WRONG]: states.LOST,
+        [events.REACH_END]: states.WON
+      }
+    },
+    [states.WON]: {
+      on: {
+        [events.RESET]: states.PLAYING,
+      }
+    },
+    [states.LOST]: {
+      on: {
+        [events.RESET]: states.PLAYING,
+      }
+    }
+  }
+}
+
 const Characters = ({ text, position }) =>
   h(
     Fragment,
