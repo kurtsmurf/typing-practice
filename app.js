@@ -1,4 +1,4 @@
-import { h, render, Fragment } from "https://cdn.skypack.dev/preact";
+import { h, render } from "https://cdn.skypack.dev/preact";
 import { isValidKeyEvent } from "./utils.js";
 import { modes, events, useGameReducer } from "./game.js";
 
