@@ -1,24 +1,13 @@
 import { useReducer } from "https://cdn.skypack.dev/preact/hooks";
-
-export const modes = {
-  PLAYING: "PLAYING",
-  WON: "WON",
-  LOST: "LOST",
-};
-
-export const events = {
-  TYPE_CORRECT_KEY: "TYPE_CORRECT_KEY",
-  TYPE_INCORRECT_KEY: "TYPE_INCORRECT_KEY",
-  REACH_END: "REACH_END",
-  RESET: "RESET",
-};
+import modes from './modes.js'
+import events from './events.js'
 
 const initialState = {
   mode: modes.PLAYING,
   position: 0,
 };
 
-export function useGameReducer() {
+export default function useGameReducer() {
   return useReducer(reducer, initialState);
 }
 

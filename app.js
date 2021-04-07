@@ -1,6 +1,8 @@
-import { h, render, Fragment } from "https://cdn.skypack.dev/preact";
+import { h, render } from "https://cdn.skypack.dev/preact";
 import { isValidKeyEvent } from "./utils.js";
-import { modes, events, useGameReducer } from "./game.js";
+import useGameReducer from "./useGameReducer.js";
+import modes from './modes.js'
+import events from './events.js'
 
 const text =
   "Hello my dude! What is happening? I really would like to know what it is that you think is happening, because I am confused. Specifically, I am confused about what is happening. Can you help me my dude? Many thanks, Eric.";
