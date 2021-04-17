@@ -1,3 +1,4 @@
+import { useEffect } from "https://cdn.skypack.dev/preact/hooks";
 import { h, render } from "https://cdn.skypack.dev/preact";
 import { isValidKeyEvent } from "./utils.js";
 import useGameReducer from "./useGameReducer.js";
@@ -24,11 +25,17 @@ function Game({ text }) {
     }
   }
 
-  document.body.onkeydown = function (e) {
-    if (isValidKeyEvent(e)) {
-      type(e.key);
+  useEffect(() => {
+    const onKeyDown = function (e) {
+      if (isValidKeyEvent(e)) {
+        type(e.key);
+      }
     }
-  };
+
+    document.body.addEventListener('keydown', onKeyDown)
+
+    return () => document.body.removeEventListener('keydown', onKeyDown)
+  }, [state, dispatch])
 
   return h(
     "div",
