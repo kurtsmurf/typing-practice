@@ -1,9 +1,7 @@
 import { useEffect } from "https://cdn.skypack.dev/preact/hooks";
 import { h, render } from "https://cdn.skypack.dev/preact";
-import { isValidKeyEvent } from "./utils.js";
-import useGameReducer from "./useGameReducer.js";
 import modes from './modes.js'
-import events from './events.js'
+import { useGame } from "./useGame.js";
 
 const text =
   "Hello my dude! What is happening? I really would like to know what it is that you think is happening, because I am confused. Specifically, I am confused about what is happening. Can you help me my dude? Many thanks, Eric.";
@@ -11,43 +9,22 @@ const text =
 render(h(Game, { text }), document.getElementById("app"));
 
 function Game({ text }) {
-  const [state, dispatch] = useGameReducer();
-  const isCorrect = (key) => key === text[state.position];
-  const isLastPosition = state.position === text.length - 1;
-
-  function type(key) {
-    if (isLastPosition && isCorrect(key)) {
-      dispatch(events.REACH_END);
-    } else if (isCorrect(key)) {
-      dispatch(events.TYPE_CORRECT_KEY);
-    } else {
-      dispatch(events.TYPE_INCORRECT_KEY);
-    }
-  }
+  const [state, onKeyDown, reset] = useGame(text)
 
   useEffect(() => {
-    const onKeyDown = function (e) {
-      if (isValidKeyEvent(e)) {
-        type(e.key);
-      }
-    }
-
     document.body.addEventListener('keydown', onKeyDown)
-
     return () => document.body.removeEventListener('keydown', onKeyDown)
-  }, [state, dispatch])
+  }, [state, onKeyDown])
 
   return h(
     "div",
-    {
-      "data-mode": state.mode,
-    },
-    h(Prompt, { mode: state.mode, dispatch }),
+    { "data-mode": state.mode },
+    h(Prompt, { mode: state.mode, reset }),
     h(Text, { text, position: state.position })
   );
 }
 
-function Prompt({ mode, dispatch }) {
+function Prompt({ mode, reset }) {
   const displayed = [modes.LOST, modes.WON].includes(mode);
   const message = mode === modes.LOST ? "You failed." : "You succeeded!";
   const nbsp = "\u00a0";
@@ -59,24 +36,26 @@ function Prompt({ mode, dispatch }) {
       { className: "prompt" },
       h("strong", {}, message),
       nbsp,
-      h("button", { onClick: () => dispatch(events.RESET) }, "Reset")
+      h("button", { onClick: reset }, "Reset")
     )
   );
 }
 
 function Text({ text, position }) {
+  const tokens = text.split("")
+  const classFrom = index => index < position
+    ? "typed"
+    : index === position
+      ? "cursor"
+      : ""
+
   return h(
     "div",
-    {
-      className: "text",
-    },
-    text.split("").map((char, index) =>
+    { className: "text" },
+    tokens.map((char, index) =>
       h(
         "span",
-        {
-          className:
-            index < position ? "typed" : index === position ? "cursor" : "",
-        },
+        { className: classFrom(index) },
         char
       )
     )
