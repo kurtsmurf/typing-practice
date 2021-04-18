@@ -14,16 +14,14 @@ body {
 
 .wrapper {
   height: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  display: grid;
+  place-items: center;
 }
 
 .wrapper > * {
-  --side-space: 1rem;
-  --double-side-space: calc(var(--side-space) * 2);
-  --max-width: calc(100% - var(--double-side-space));
+  --gutter: 1rem;
+  --double-gutter: calc(var(--gutter) * 2);
+  --max-width: calc(100% - var(--double-gutter));
   width: min(65ch, var(--max-width));
 }
 
