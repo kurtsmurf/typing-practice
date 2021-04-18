@@ -31,6 +31,10 @@ Have like a little fighter avatar who kicks and punches the letters away as you 
 
 When you type a wrong letter, the avatar gets knocked out.
 
+### Make it more satisfying to win
+
+Throw a little fanfare.
+
 ## but before I try any of that...
 
 Get all game logic out of the presentation layer.
