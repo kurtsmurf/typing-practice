@@ -1,6 +1,7 @@
 import { useReducer } from "https://cdn.skypack.dev/preact/hooks";
 import modes from "./modes.js";
 import events from "./events.js";
+import canvasConfetti from "https://cdn.skypack.dev/canvas-confetti";
 
 const initialState = {
   mode: modes.PLAYING,
@@ -17,11 +18,15 @@ const transitions = {
       ...state,
       mode: modes.LOST,
     }),
-    [events.REACH_END]: (state) => ({
-      ...state,
-      mode: modes.WON,
-      position: state.position + 1,
-    }),
+    [events.REACH_END]: (state) => {
+      canvasConfetti();
+
+      return {
+        ...state,
+        mode: modes.WON,
+        position: state.position + 1,
+      };
+    },
     [events.RESET]: (_) => initialState,
   },
   [modes.WON]: {
