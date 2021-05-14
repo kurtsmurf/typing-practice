@@ -1,8 +1,8 @@
 import { h, render } from "https://cdn.skypack.dev/preact";
 import { isValidKeyEvent } from "./utils.js";
 import useGameReducer from "./useGameReducer.js";
-import modes from './modes.js'
-import events from './events.js'
+import modes from "./modes.js";
+import events from "./events.js";
 
 const text =
   "Hello my dude! What is happening? I really would like to know what it is that you think is happening, because I am confused. Specifically, I am confused about what is happening. Can you help me my dude? Many thanks, Eric.";
@@ -16,11 +16,11 @@ function Game({ text }) {
 
   function type(key) {
     if (isLastPosition && isCorrect(key)) {
-      dispatch(events.REACH_END);
+      dispatch({ type: events.REACH_END });
     } else if (isCorrect(key)) {
-      dispatch(events.TYPE_CORRECT_KEY);
+      dispatch({ type: events.TYPE_CORRECT_KEY });
     } else {
-      dispatch(events.TYPE_INCORRECT_KEY);
+      dispatch({ type: events.TYPE_INCORRECT_KEY });
     }
   }
 
@@ -52,7 +52,7 @@ function Prompt({ mode, dispatch }) {
       { className: "prompt" },
       h("strong", {}, message),
       nbsp,
-      h("button", { onClick: () => dispatch(events.RESET) }, "Reset")
+      h("button", { onClick: () => dispatch({ type: events.RESET }) }, "Reset")
     )
   );
 }

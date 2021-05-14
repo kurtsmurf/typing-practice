@@ -27,19 +27,19 @@ const transitions = {
         position: state.position + 1,
       };
     },
-    [events.RESET]: (_) => initialState,
+    [events.RESET]: () => initialState,
   },
   [modes.WON]: {
-    [events.RESET]: (_) => initialState,
+    [events.RESET]: () => initialState,
   },
   [modes.LOST]: {
-    [events.RESET]: (_) => initialState,
+    [events.RESET]: () => initialState,
   },
 };
 
 function reducer(state, event) {
-  const transition = transitions[state.mode][event];
-  return transition ? transition(state) : state;
+  const transition = transitions[state.mode][event.type];
+  return transition ? transition(state, event) : state;
 }
 
 export default function useGameReducer() {
