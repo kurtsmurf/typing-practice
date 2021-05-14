@@ -1,22 +1,21 @@
 import { h, render } from "https://cdn.skypack.dev/preact";
-import { isValidKeyEvent } from "./utils.js";
+import { useEffect } from "https://cdn.skypack.dev/preact/hooks";
 import useGameReducer from "./useGameReducer.js";
 import modes from "./modes.js";
 import events from "./events.js";
 
-const text =
-  "Hello my dude! What is happening? I really would like to know what it is that you think is happening, because I am confused. Specifically, I am confused about what is happening. Can you help me my dude? Many thanks, Eric.";
-
 render(h(Game), document.getElementById("app"));
 
 function Game() {
+  const text =
+    "Hello my dude! What is happening? I really would like to know what it is that you think is happening, because I am confused. Specifically, I am confused about what is happening. Can you help me my dude? Many thanks, Eric.";
   const [state, dispatch] = useGameReducer(text);
 
-  document.body.onkeydown = function (e) {
-    if (isValidKeyEvent(e)) {
-      dispatch({ type: events.KEY_DOWN, key: e.key });
-    }
-  };
+  useEffect(() => {
+    const onKeyDown = (e) => dispatch({ type: events.KEY_DOWN, e });
+    document.body.addEventListener("keydown", onKeyDown);
+    return () => document.body.removeEventListener("keydown", onKeyDown);
+  }, [dispatch]);
 
   return h(
     "div",

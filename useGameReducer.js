@@ -1,7 +1,8 @@
 import { useReducer } from "https://cdn.skypack.dev/preact/hooks";
+import canvasConfetti from "https://cdn.skypack.dev/canvas-confetti";
 import modes from "./modes.js";
 import events from "./events.js";
-import canvasConfetti from "https://cdn.skypack.dev/canvas-confetti";
+import { isValidKeyEvent } from "./utils.js";
 
 export default function (text) {
   const initialState = {
@@ -13,7 +14,11 @@ export default function (text) {
   const transitions = {
     [modes.PLAYING]: {
       [events.KEY_DOWN]: (state, event) => {
-        const isCorrect = event.key === state.text[state.position];
+        if (!isValidKeyEvent(event.e)) {
+          return state;
+        }
+
+        const isCorrect = event.e.key === state.text[state.position];
         const isLastPosition = state.position === state.text.length - 1;
 
         return isLastPosition && isCorrect
