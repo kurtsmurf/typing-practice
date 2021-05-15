@@ -1,8 +1,21 @@
 import { useReducer } from "https://cdn.skypack.dev/preact/hooks";
 import canvasConfetti from "https://cdn.skypack.dev/canvas-confetti";
-import modes from "./modes.js";
-import events from "./events.js";
 import { isValidKeyEvent } from "./utils.js";
+
+export const modes = {
+  PLAYING: "PLAYING",
+  WON: "WON",
+  LOST: "LOST",
+};
+
+export const events = {
+  KEY_DOWN: "KEY_DOWN",
+  TYPE_CORRECT_KEY: "TYPE_CORRECT_KEY",
+  TYPE_INCORRECT_KEY: "TYPE_INCORRECT_KEY",
+  REACH_END: "REACH_END",
+  RESET: "RESET",
+};
+
 
 export function useGameReducer(text) {
   const initialState = {

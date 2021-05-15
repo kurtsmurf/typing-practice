@@ -1,8 +1,6 @@
 import { h } from "https://cdn.skypack.dev/preact";
 import { useEffect } from "https://cdn.skypack.dev/preact/hooks";
-import { useGameReducer } from "./useGameReducer.js";
-import modes from "./modes.js";
-import events from "./events.js";
+import { useGameReducer, modes, events } from "./useGameReducer.js";
 
 export function Game({ text }) {
   const [state, dispatch] = useGameReducer(text);
