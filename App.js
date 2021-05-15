@@ -1,62 +1,7 @@
 import { h } from "https://cdn.skypack.dev/preact";
-import { useReducer, useState } from "https://cdn.skypack.dev/preact/hooks";
+import { useState } from "https://cdn.skypack.dev/preact/hooks";
 import { Game } from './Game.js'
-
-const text =
-  "Hello my dude! What is happening? I really would like to know what it is that you think is happening, because I am confused. Specifically, I am confused about what is happening. Can you help me my dude? Many thanks, Eric.";
-
-const modes = {
-  GAME: "GAME",
-  EDIT: "EDIT"
-}
-
-const events = {
-  SAVE: "SAVE",
-  CANCEL: "CANCEL",
-  EDIT: "EDIT"
-}
-
-const initialState = {
-  text, mode: modes.GAME,
-}
-
-const transitions = {
-  [modes.GAME]: {
-    [events.EDIT]: function (state) {
-      return {
-        ...state,
-        mode: modes.EDIT
-      }
-    }
-  },
-  [modes.EDIT]: {
-    [events.SAVE]: function (state, event) {
-      return {
-        ...state,
-        mode: modes.GAME,
-        text: event.data.text
-      }
-    },
-    [events.CANCEL]: function (state) {
-      return {
-        ...state,
-        mode: modes.GAME
-      }
-    },
-  }
-}
-
-function useAppReducer() {
-  function reducer(state, event) {
-    console.log(state, event)
-    const transition = transitions[state.mode][event.type]
-    const next = transition ? transition(state, event) : state
-    console.log(next)
-    return next
-  }
-
-  return useReducer(reducer, initialState)
-}
+import { useAppReducer, modes, events } from './useAppReducer.js'
 
 export function App() {
   const [state, dispatch] = useAppReducer()
