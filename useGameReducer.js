@@ -4,7 +4,7 @@ import modes from "./modes.js";
 import events from "./events.js";
 import { isValidKeyEvent } from "./utils.js";
 
-export default function (text) {
+export function useGameReducer(text) {
   const initialState = {
     text,
     mode: modes.PLAYING,
@@ -24,8 +24,8 @@ export default function (text) {
         return isLastPosition && isCorrect
           ? reducer(state, { type: events.REACH_END })
           : isCorrect
-          ? reducer(state, { type: events.TYPE_CORRECT_KEY })
-          : reducer(state, { type: events.TYPE_INCORRECT_KEY });
+            ? reducer(state, { type: events.TYPE_CORRECT_KEY })
+            : reducer(state, { type: events.TYPE_INCORRECT_KEY });
       },
       [events.TYPE_CORRECT_KEY]: (state) => ({
         ...state,

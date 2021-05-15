@@ -1,14 +1,10 @@
-import { h, render } from "https://cdn.skypack.dev/preact";
+import { h } from "https://cdn.skypack.dev/preact";
 import { useEffect } from "https://cdn.skypack.dev/preact/hooks";
-import useGameReducer from "./useGameReducer.js";
+import { useGameReducer } from "./useGameReducer.js";
 import modes from "./modes.js";
 import events from "./events.js";
 
-render(h(Game), document.getElementById("app"));
-
-function Game() {
-  const text =
-    "Hello my dude! What is happening? I really would like to know what it is that you think is happening, because I am confused. Specifically, I am confused about what is happening. Can you help me my dude? Many thanks, Eric.";
+export function Game({ text }) {
   const [state, dispatch] = useGameReducer(text);
 
   useEffect(() => {
