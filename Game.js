@@ -1,12 +1,12 @@
 import { h } from "https://cdn.skypack.dev/preact";
 import { useEffect } from "https://cdn.skypack.dev/preact/hooks";
-import { useGameReducer, modes, events } from "./useGameReducer.js";
+import { useGameReducer, gameModes, gameEvents } from "./useGameReducer.js";
 
 export function Game({ text }) {
   const [state, dispatch] = useGameReducer(text);
 
   useEffect(() => {
-    const onKeyDown = (e) => dispatch({ type: events.KEY_DOWN, e });
+    const onKeyDown = (e) => dispatch({ type: gameEvents.KEY_DOWN, e });
     document.body.addEventListener("keydown", onKeyDown);
     return () => document.body.removeEventListener("keydown", onKeyDown);
   }, [dispatch]);
@@ -20,8 +20,8 @@ export function Game({ text }) {
 }
 
 function Prompt({ mode, dispatch }) {
-  const displayed = [modes.LOST, modes.WON].includes(mode);
-  const message = mode === modes.LOST ? "You failed." : "You succeeded!";
+  const displayed = [gameModes.LOST, gameModes.WON].includes(mode);
+  const message = mode === gameModes.LOST ? "You failed." : "You succeeded!";
   const nbsp = "\u00a0";
 
   return (
@@ -31,7 +31,7 @@ function Prompt({ mode, dispatch }) {
       { className: "prompt" },
       h("strong", {}, message),
       nbsp,
-      h("button", { onClick: () => dispatch({ type: events.RESET }) }, "Reset")
+      h("button", { onClick: () => dispatch({ type: gameEvents.RESET }) }, "Reset")
     )
   );
 }

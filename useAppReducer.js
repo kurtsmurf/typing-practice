@@ -1,11 +1,11 @@
 import { useReducer } from "https://cdn.skypack.dev/preact/hooks";
 
-export const modes = {
+export const appModes = {
   GAME: "GAME",
   EDIT: "EDIT"
 }
 
-export const events = {
+export const appEvents = {
   SAVE: "SAVE",
   CANCEL: "CANCEL",
   EDIT: "EDIT"
@@ -14,30 +14,30 @@ export const events = {
 const initialState = {
   text:
     "Hello my dude! What is happening? I really would like to know what it is that you think is happening, because I am confused. Specifically, I am confused about what is happening. Can you help me my dude? Many thanks, Eric.",
-  mode: modes.GAME,
+  mode: appModes.GAME,
 }
 
 const transitions = {
-  [modes.GAME]: {
-    [events.EDIT]: function (state) {
+  [appModes.GAME]: {
+    [appEvents.EDIT]: function (state) {
       return {
         ...state,
-        mode: modes.EDIT
+        mode: appModes.EDIT
       }
     }
   },
-  [modes.EDIT]: {
-    [events.SAVE]: function (state, event) {
+  [appModes.EDIT]: {
+    [appEvents.SAVE]: function (state, event) {
       return {
         ...state,
-        mode: modes.GAME,
+        mode: appModes.GAME,
         text: event.data.text
       }
     },
-    [events.CANCEL]: function (state) {
+    [appEvents.CANCEL]: function (state) {
       return {
         ...state,
-        mode: modes.GAME
+        mode: appModes.GAME
       }
     },
   }
