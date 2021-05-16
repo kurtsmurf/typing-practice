@@ -14,29 +14,37 @@ export function Game({ text }) {
   return h(
     "div",
     { "data-mode": state.mode },
-    h(Prompt, { mode: state.mode, dispatch }),
-    h(Text, { text: state.text, position: state.position })
+    h(GamePrompt, { mode: state.mode, dispatch }),
+    h(GameText, { text: state.text, position: state.position })
   );
 }
 
-function Prompt({ mode, dispatch }) {
-  const displayed = [gameModes.LOST, gameModes.WON].includes(mode);
-  const message = mode === gameModes.LOST ? "You failed." : "You succeeded!";
-  const nbsp = "\u00a0";
+function GamePrompt({ mode, dispatch }) {
+  if (![gameModes.LOST, gameModes.WON].includes(mode)) {
+    return
+  }
 
+  const message = mode === gameModes.LOST ? "You failed." : "You succeeded!";
+
+  function action() { dispatch({ type: gameEvents.RESET }) }
+
+  return h(Prompt, { message, action })
+}
+
+function Prompt({ message, action }) {
+  const nbsp = "\u00a0";
   return (
-    displayed &&
     h(
       "div",
       { className: "prompt" },
       h("strong", {}, message),
       nbsp,
-      h("button", { onClick: () => dispatch({ type: gameEvents.RESET }) }, "Reset")
+      h("button", { onClick: action }, "Reset")
     )
   );
 }
 
-function Text({ text, position }) {
+function GameText({ text, position }) {
   return h(
     "div",
     { className: "text" },
