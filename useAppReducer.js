@@ -28,10 +28,12 @@ const transitions = {
   },
   [appModes.EDIT]: {
     [appEvents.SAVE]: function (state, event) {
+      const sanitizedText = event.data.text.trim().replaceAll(/[\s\r\n]+/g, " ")
+
       return {
         ...state,
         mode: appModes.GAME,
-        text: event.data.text
+        text: sanitizedText || state.text
       }
     },
     [appEvents.CANCEL]: function (state) {
