@@ -6,24 +6,32 @@ import { useAppReducer, appModes, appEvents } from './useAppReducer.js'
 export function App() {
   const [state, dispatch] = useAppReducer()
 
-  return state.mode === appModes.GAME
-    ? h(
-      'div',
-      {},
-      h(
-        'button',
-        { onClick: () => dispatch({ type: appEvents.EDIT }) },
-        'Edit'
-      ),
-      h(Game, { text: state.text })
-    )
-    : state.mode === appModes.EDIT
-      ? h(Editor, { dispatch, currentText: state.text })
-      : "Ya broken!!"
+  if (state.mode === appModes.GAME) {
+    return h(GameView, { state, dispatch })
+  }
+  else if (state.mode === appModes.EDIT) {
+    return h(Editor, { state, dispatch })
+  }
+  else {
+    return "Ya broken!!"
+  }
 }
 
-function Editor({ dispatch, currentText }) {
-  const [text, setText] = useState(currentText)
+function GameView({ state, dispatch }) {
+  return h(
+    'div',
+    {},
+    h(
+      'button',
+      { onClick: () => dispatch({ type: appEvents.EDIT }) },
+      'Edit'
+    ),
+    h(Game, { text: state.text })
+  )
+}
+
+function Editor({ state, dispatch }) {
+  const [text, setText] = useState(state.text)
 
   return h(
     'div',
