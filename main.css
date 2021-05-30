@@ -7,22 +7,39 @@ html {
 /* layout */
 
 body {
-  font-size: larger;
+  font-size: 1.2rem;
   height: 100vh;
   margin: 0;
 }
 
-.wrapper {
+#app {
   height: 100%;
-  display: grid;
-  place-items: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-.wrapper > * {
+#app > * {
   --gutter: 1rem;
   --double-gutter: calc(var(--gutter) * 2);
   --max-width: calc(100% - var(--double-gutter));
   width: min(65ch, var(--max-width));
+}
+
+#game,
+#editor {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  height: 100%;
+}
+
+#editor textarea {
+  width: 100%;
+  font-size: 1.2rem;
+  font-family: inherit;
+  padding: 0;
+  border: none;
 }
 
 .prompt {
