@@ -1,7 +1,8 @@
 import { h, Fragment } from "https://cdn.skypack.dev/preact";
-import { useState } from "https://cdn.skypack.dev/preact/hooks";
+import { useState, useRef, useEffect } from "https://cdn.skypack.dev/preact/hooks";
 import { Game } from './Game.js'
 import { useAppReducer, appModes, appEvents } from './useAppReducer.js'
+
 
 export function App() {
   const [state, dispatch] = useAppReducer()
@@ -49,12 +50,18 @@ function EditorView({ state, dispatch }) {
     )
   }
 
+  const textAreaRef = useRef(null)
+
+  useEffect(() => {
+    textAreaRef.current.focus()
+  }, [textAreaRef])
+
   function Editor() {
     return h('div', { id: 'editor' },
       h('textarea',
         {
-          onChange: e =>
-            setText(e.target.value), value: text,
+          onChange: e => setText(e.target.value), value: text,
+          ref: textAreaRef,
           rows: 3
         }
       )
