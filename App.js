@@ -2,7 +2,7 @@ import { h, Fragment } from "https://cdn.skypack.dev/preact";
 import { useState, useRef, useEffect } from "https://cdn.skypack.dev/preact/hooks";
 import { Game } from './Game.js'
 import { useAppReducer, appModes, appEvents } from './useAppReducer.js'
-
+import autosize from 'https://cdn.skypack.dev/autosize';
 
 export function App() {
   const [state, dispatch] = useAppReducer()
@@ -53,23 +53,24 @@ function EditorView({ state, dispatch }) {
   const textAreaRef = useRef(null)
 
   useEffect(() => {
-    textAreaRef.current.focus()
+    if (textAreaRef.current) textAreaRef.current.focus()
   }, [textAreaRef])
 
+  useEffect(() => {
+    autosize(textAreaRef.current)
+  }, [textAreaRef.current, text])
+
   function Editor() {
-    return h('div', { id: 'editor' },
-      h('textarea',
-        {
-          onChange: e => setText(e.target.value), value: text,
-          ref: textAreaRef,
-          rows: 3
-        }
-      )
+    return h('textarea',
+      {
+        onChange: e => setText(e.target.value), value: text,
+        ref: textAreaRef,
+      }
     )
   }
 
-  return h(Fragment, {},
-    h(Controls),
-    h(Editor)
+  return h('div', { id: "editor" },
+    h(Editor),
+    h(Controls)
   )
 }
