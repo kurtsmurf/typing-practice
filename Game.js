@@ -13,7 +13,7 @@ export function Game({ text }) {
 
   return h(
     "div",
-    { id: "game", "data-mode": state.mode },
+    { "data-mode": state.mode },
     h(GamePrompt, { mode: state.mode, dispatch }),
     h(GameText, { text: state.text, position: state.position })
   );

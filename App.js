@@ -28,9 +28,9 @@ function GameView({ state, dispatch }) {
     )
   }
 
-  return h(Fragment, {},
+  return h('div', { id: "editor" },
+    h(Game, { text: state.text }),
     h(Controls),
-    h(Game, { text: state.text })
   )
 }
 
