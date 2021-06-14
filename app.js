@@ -46,15 +46,18 @@ function Text({ text, position }) {
   return h(
     "div",
     { className: "text" },
-    text.split("").map((char, index) =>
-      h(
-        "span",
-        {
-          className:
-            index < position ? "typed" : index === position ? "cursor" : "",
-        },
-        char
-      )
-    )
+    text.split("").map((char, index) => {
+      const classList = [
+        index < position && "typed",
+        index === position && "cursor",
+        char === " " && "space",
+      ];
+
+      return h("span", { className: className(classList) }, char);
+    })
   );
+}
+
+function className(classList) {
+  return classList.filter((x) => x).join(" ");
 }

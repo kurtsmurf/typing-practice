@@ -36,9 +36,17 @@ body {
   opacity: 0.2;
 }
 
-.cursor {
+.cursor,
+.cursor::before {
   background-color: yellow;
   border-radius: 2px;
+}
+
+.space::before {
+  position: absolute;
+  color: #bbb;
+  content: "·";
+  text-align: center;
 }
 
 .text {
