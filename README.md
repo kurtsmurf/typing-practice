@@ -11,9 +11,7 @@ When you have to go back to the beginning every time you type the wrong key, the
 
 It trains you to prioritize accuracy - nobody cares how fast you can run into a brick wall.
 
-## how might I change this thing?
-
-### choose-able text
+## how could it be better?
 
 ### choose-able fonts
 
@@ -25,8 +23,10 @@ Calculate time to stroke each key - use that duration to color in the typed char
 
 This would (?) let the user look back and have a quick impression of where they sped up or slowed down.
 
-### Avatar
+how would the first character work? If heat = end_time - start_time, what is start time for the first character typed?
 
-Have like a little fighter avatar who kicks and punches the letters away as you chew through text.
+### avatar
+
+Have like a little fighter avatar who kicks and punches the letters away as you chew through text (letters go flying).
 
 When you type a wrong letter, the avatar gets knocked out.

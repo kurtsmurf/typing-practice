@@ -7,26 +7,29 @@ html {
 /* layout */
 
 body {
-  font-size: larger;
   height: 100vh;
   margin: 0;
 }
 
-.wrapper {
+#app {
   height: 100%;
-  display: grid;
-  place-items: center;
+  display: flex;
+  justify-content: center;
 }
 
-.wrapper > * {
+#app > * {
   --gutter: 1rem;
   --double-gutter: calc(var(--gutter) * 2);
   --max-width: calc(100% - var(--double-gutter));
   width: min(65ch, var(--max-width));
 }
 
-.prompt {
-  margin-bottom: 1rem;
+#game,
+#editor {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100%;
 }
 
 /* game */

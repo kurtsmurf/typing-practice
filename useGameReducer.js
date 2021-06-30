@@ -1,19 +1,31 @@
 import { useReducer } from "https://cdn.skypack.dev/preact/hooks";
 import canvasConfetti from "https://cdn.skypack.dev/canvas-confetti";
-import modes from "./modes.js";
-import events from "./events.js";
 import { isValidKeyEvent } from "./utils.js";
 
-export default function (text) {
+export const gameModes = {
+  PLAYING: "PLAYING",
+  WON: "WON",
+  LOST: "LOST",
+};
+
+export const gameEvents = {
+  KEY_DOWN: "KEY_DOWN",
+  TYPE_CORRECT_KEY: "TYPE_CORRECT_KEY",
+  TYPE_INCORRECT_KEY: "TYPE_INCORRECT_KEY",
+  REACH_END: "REACH_END",
+  RESET: "RESET",
+};
+
+export function useGameReducer(text) {
   const initialState = {
     text,
-    mode: modes.PLAYING,
+    mode: gameModes.PLAYING,
     position: 0,
   };
 
   const transitions = {
-    [modes.PLAYING]: {
-      [events.KEY_DOWN]: (state, event) => {
+    [gameModes.PLAYING]: {
+      [gameEvents.KEY_DOWN]: (state, event) => {
         if (!isValidKeyEvent(event.e)) {
           return state;
         }
@@ -22,35 +34,35 @@ export default function (text) {
         const isLastPosition = state.position === state.text.length - 1;
 
         return isLastPosition && isCorrect
-          ? reducer(state, { type: events.REACH_END })
+          ? reducer(state, { type: gameEvents.REACH_END })
           : isCorrect
-          ? reducer(state, { type: events.TYPE_CORRECT_KEY })
-          : reducer(state, { type: events.TYPE_INCORRECT_KEY });
+            ? reducer(state, { type: gameEvents.TYPE_CORRECT_KEY })
+            : reducer(state, { type: gameEvents.TYPE_INCORRECT_KEY });
       },
-      [events.TYPE_CORRECT_KEY]: (state) => ({
+      [gameEvents.TYPE_CORRECT_KEY]: (state) => ({
         ...state,
         position: state.position + 1,
       }),
-      [events.TYPE_INCORRECT_KEY]: (state) => ({
+      [gameEvents.TYPE_INCORRECT_KEY]: (state) => ({
         ...state,
-        mode: modes.LOST,
+        mode: gameModes.LOST,
       }),
-      [events.REACH_END]: (state) => {
+      [gameEvents.REACH_END]: (state) => {
         canvasConfetti();
 
         return {
           ...state,
-          mode: modes.WON,
+          mode: gameModes.WON,
           position: state.position + 1,
         };
       },
-      [events.RESET]: () => initialState,
+      [gameEvents.RESET]: () => initialState,
     },
-    [modes.WON]: {
-      [events.RESET]: () => initialState,
+    [gameModes.WON]: {
+      [gameEvents.RESET]: () => initialState,
     },
-    [modes.LOST]: {
-      [events.RESET]: () => initialState,
+    [gameModes.LOST]: {
+      [gameEvents.RESET]: () => initialState,
     },
   };
 
