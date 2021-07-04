@@ -13,7 +13,7 @@ export const useCapsLockDetection = () => {
   useEffect(() => {
     document.body.addEventListener("keydown", onKeyDown)
     return () => document.body.removeEventListener("keydown", onKeyDown)
-  }, [onKeyDown])
+  }, [setCapsLockIsOn])
 
   return capsLockIsOn
 }

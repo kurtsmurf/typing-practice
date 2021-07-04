@@ -1,8 +1,6 @@
 # typing-practice
 
-## justification
-
-Why another typing website?
+## Motivation
 
 1. No ads.
 1. Values _accuracy_ first, then speed.
@@ -14,14 +12,17 @@ It trains you to prioritize accuracy - nobody cares how fast you can run into a 
 ## fix me
 
 1. caps-lock indicator
-1. focus reset button on game over
-1. highlight something when cursor reaches end of line
+1. "press any key to start": disabled mode for when returning from offline or starting from scratch.
+1. focus reset button on game over (make focus transitions more intuitive in general)
+1. special highlight when cursor reaches end of line (right now show nothing)
+1. show mis-typed key on failure
+1. test contrast
 
-## how could it be better?
+## wierd ideas
 
 ### choose-able fonts
 
-How would this work? Would the user paste in a google-fonts URL (would this even work)? Would you present a limited menu of options?
+serif vs. sans, monospace vs. variable-width
 
 ### "heat-map" of typing speed per character
 
