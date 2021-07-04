@@ -11,6 +11,12 @@ When you have to go back to the beginning every time you type the wrong key, the
 
 It trains you to prioritize accuracy - nobody cares how fast you can run into a brick wall.
 
+## fix me
+
+1. caps-lock indicator
+1. focus reset button on game over
+1. highlight something when cursor reaches end of line
+
 ## how could it be better?
 
 ### choose-able fonts
