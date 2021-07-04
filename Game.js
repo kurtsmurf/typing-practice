@@ -1,6 +1,7 @@
 import { h } from "https://cdn.skypack.dev/preact";
 import { useEffect } from "https://cdn.skypack.dev/preact/hooks";
 import { useGameReducer, gameModes, gameEvents } from "./useGameReducer.js";
+import { useCapsLockDetection } from "./useCapsLockDetection.js"
 
 export function Game({ text }) {
   const [state, dispatch] = useGameReducer(text);
@@ -14,9 +15,16 @@ export function Game({ text }) {
   return h(
     "div",
     { "data-mode": state.mode },
+    h(CapsLockIndicator),
     h(GamePrompt, { mode: state.mode, dispatch }),
     h(GameText, { text: state.text, position: state.position })
   );
+}
+
+function CapsLockIndicator() {
+  const capsLockIsOn = useCapsLockDetection()
+
+  return capsLockIsOn && h("strong", { style: "color: red;" }, "CAPS LOCK")
 }
 
 function GamePrompt({ mode, dispatch }) {

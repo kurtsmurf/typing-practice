@@ -1,4 +1,4 @@
-import { h, Fragment } from "https://cdn.skypack.dev/preact";
+import { h } from "https://cdn.skypack.dev/preact";
 import { useState, useRef, useEffect } from "https://cdn.skypack.dev/preact/hooks";
 import { Game } from './Game.js'
 import { useAppReducer, appModes, appEvents } from './useAppReducer.js'
