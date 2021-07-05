@@ -17,8 +17,31 @@ export function Game({ text }) {
     { "data-mode": state.mode },
     h(CapsLockIndicator),
     h(GamePrompt, { mode: state.mode, dispatch }),
-    h(GameText, { text: state.text, position: state.position })
+    h(GameText, { text: state.text, position: state.position }),
+    h(PlayPauseButton, { mode: state.mode, dispatch })
   );
+}
+
+function PlayPauseButton({ mode, dispatch }) {
+  if (![gameModes.PAUSED, gameModes.PLAYING].includes(mode)) return
+
+  const PlayButton = () => {
+    const onClick = () => dispatch({ type: gameEvents.RESUME })
+
+    return h(
+      "button", { onClick }, "Resume"
+    )
+  }
+
+  const PauseButton = () => {
+    const onClick = () => dispatch({ type: gameEvents.PAUSE })
+
+    return h(
+      "button", { onClick }, "Pause"
+    )
+  }
+
+  return mode === gameModes.PAUSED ? h(PlayButton) : h(PauseButton)
 }
 
 function CapsLockIndicator() {

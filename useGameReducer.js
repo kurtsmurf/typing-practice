@@ -6,6 +6,7 @@ export const gameModes = {
   PLAYING: "PLAYING",
   WON: "WON",
   LOST: "LOST",
+  PAUSED: "PAUSED"
 };
 
 export const gameEvents = {
@@ -14,6 +15,8 @@ export const gameEvents = {
   TYPE_INCORRECT_KEY: "TYPE_INCORRECT_KEY",
   REACH_END: "REACH_END",
   RESET: "RESET",
+  PAUSE: "PAUSE",
+  RESUME: "RESUME"
 };
 
 export function useGameReducer(text) {
@@ -57,6 +60,10 @@ export function useGameReducer(text) {
         };
       },
       [gameEvents.RESET]: () => initialState,
+      [gameEvents.PAUSE]: (state) => ({
+        ...state,
+        mode: gameModes.PAUSED
+      })
     },
     [gameModes.WON]: {
       [gameEvents.RESET]: () => initialState,
@@ -64,6 +71,12 @@ export function useGameReducer(text) {
     [gameModes.LOST]: {
       [gameEvents.RESET]: () => initialState,
     },
+    [gameModes.PAUSED]: {
+      [gameEvents.RESUME]: (state) => ({
+        ...state,
+        mode: gameModes.PLAYING
+      })
+    }
   };
 
   function reducer(state, event) {
