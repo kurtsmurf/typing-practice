@@ -2,46 +2,38 @@ import { h } from "https://cdn.skypack.dev/preact";
 import { useEffect } from "https://cdn.skypack.dev/preact/hooks";
 import { useGameReducer, gameModes, gameEvents } from "./useGameReducer.js";
 import { useCapsLockDetection } from "./useCapsLockDetection.js"
+import { useWindowFocusDetection } from './useWindowFocusDetection.js'
+import { useWindowEventListener } from "./useWindowEventListener.js";
 
 export function Game({ text }) {
   const [state, dispatch] = useGameReducer(text);
 
+  useWindowEventListener("keydown", (e) => dispatch({ type: gameEvents.KEY_DOWN, e }));
+
+  const windowHasFocus = useWindowFocusDetection()
+
   useEffect(() => {
-    const onKeyDown = (e) => dispatch({ type: gameEvents.KEY_DOWN, e });
-    document.body.addEventListener("keydown", onKeyDown);
-    return () => document.body.removeEventListener("keydown", onKeyDown);
-  }, [dispatch]);
+    if (!windowHasFocus) {
+      dispatch({ type: gameEvents.PAUSE })
+    }
+  }, [windowHasFocus])
 
   return h(
     "div",
     { "data-mode": state.mode },
     h(CapsLockIndicator),
-    h(GamePrompt, { mode: state.mode, dispatch }),
+    h(Prompt, { mode: state.mode, dispatch }),
     h(GameText, { text: state.text, position: state.position }),
-    h(PlayPauseButton, { mode: state.mode, dispatch })
+    state.mode === gameModes.PAUSED && h(ResumePrompt, { dispatch })
   );
 }
 
-function PlayPauseButton({ mode, dispatch }) {
-  if (![gameModes.PAUSED, gameModes.PLAYING].includes(mode)) return
+const ResumePrompt = ({ dispatch }) => {
+  useWindowEventListener("keypress", () => dispatch({ type: gameEvents.RESUME }))
 
-  const PlayButton = () => {
-    const onClick = () => dispatch({ type: gameEvents.RESUME })
-
-    return h(
-      "button", { onClick }, "Resume"
-    )
-  }
-
-  const PauseButton = () => {
-    const onClick = () => dispatch({ type: gameEvents.PAUSE })
-
-    return h(
-      "button", { onClick }, "Pause"
-    )
-  }
-
-  return mode === gameModes.PAUSED ? h(PlayButton) : h(PauseButton)
+  return h("div", {
+    style: "color: lightgrey;"
+  }, "Press any key to resume.")
 }
 
 function CapsLockIndicator() {
@@ -50,29 +42,21 @@ function CapsLockIndicator() {
   return capsLockIsOn && h("strong", { style: "color: red;" }, "CAPS LOCK")
 }
 
-function GamePrompt({ mode, dispatch }) {
-  if (![gameModes.LOST, gameModes.WON].includes(mode)) {
-    return
-  }
+function Prompt({ mode, dispatch }) {
+  if (![gameModes.LOST, gameModes.WON].includes(mode)) return
 
+  const nbsp = "\u00a0";
   const message = mode === gameModes.LOST ? "You failed." : "You succeeded!";
 
   function action() { dispatch({ type: gameEvents.RESET }) }
 
-  return h(Prompt, { message, action })
-}
-
-function Prompt({ message, action }) {
-  const nbsp = "\u00a0";
-  return (
-    h(
-      "div",
-      { className: "prompt" },
-      h("strong", {}, message),
-      nbsp,
-      h("button", { onClick: action }, "Reset")
-    )
-  );
+  return h(
+    "div",
+    { className: "prompt" },
+    h("strong", {}, message),
+    nbsp,
+    h("button", { onClick: action }, "Reset")
+  )
 }
 
 function GameText({ text, position }) {
