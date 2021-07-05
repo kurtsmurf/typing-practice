@@ -37,11 +37,11 @@ const ResumePrompt = ({ dispatch }) => {
     () => dispatch({ type: gameEvents.RESUME }),
   );
 
-  return h("div", {}, "Press any key to continue.");
+  return h("strong", {}, "Press any key to continue.");
 };
 
 function CapsLockIndicator() {
-  return h("strong", { style: "color: red;" }, "CAPS LOCK");
+  return h("strong", { style: "color: red;" }, "caps lock");
 }
 
 function Prompt({ mode, dispatch }) {
