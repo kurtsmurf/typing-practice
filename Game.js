@@ -1,46 +1,65 @@
 import { h } from "https://cdn.skypack.dev/preact";
 import { useEffect } from "https://cdn.skypack.dev/preact/hooks";
-import { useGameReducer, gameModes, gameEvents } from "./useGameReducer.js";
+import { gameEvents, gameModes, useGameReducer } from "./useGameReducer.js";
+import { useCapsLockDetection } from "./useCapsLockDetection.js";
+import { useWindowFocusDetection } from "./useWindowFocusDetection.js";
+import { useWindowEventListener } from "./useWindowEventListener.js";
 
 export function Game({ text }) {
   const [state, dispatch] = useGameReducer(text);
+  const windowHasFocus = useWindowFocusDetection();
+  const capsLockIsOn = useCapsLockDetection();
 
   useEffect(() => {
-    const onKeyDown = (e) => dispatch({ type: gameEvents.KEY_DOWN, e });
-    document.body.addEventListener("keydown", onKeyDown);
-    return () => document.body.removeEventListener("keydown", onKeyDown);
-  }, [dispatch]);
+    if (!windowHasFocus) {
+      dispatch({ type: gameEvents.PAUSE });
+    }
+  }, [windowHasFocus]);
+
+  useWindowEventListener(
+    "keydown",
+    (e) => dispatch({ type: gameEvents.KEY_DOWN, e }),
+  );
 
   return h(
     "div",
     { "data-mode": state.mode },
-    h(GamePrompt, { mode: state.mode, dispatch }),
-    h(GameText, { text: state.text, position: state.position })
+    state.mode !== gameModes.PAUSED && capsLockIsOn && h(CapsLockIndicator),
+    state.mode === gameModes.PAUSED && h(ResumePrompt, { dispatch }),
+    h(Prompt, { mode: state.mode, dispatch }),
+    h(GameText, { text: state.text, position: state.position }),
   );
 }
 
-function GamePrompt({ mode, dispatch }) {
-  if (![gameModes.LOST, gameModes.WON].includes(mode)) {
-    return
-  }
+const ResumePrompt = ({ dispatch }) => {
+  useWindowEventListener(
+    "keypress",
+    () => dispatch({ type: gameEvents.RESUME }),
+  );
 
-  const message = mode === gameModes.LOST ? "You failed." : "You succeeded!";
+  return h("div", {}, "Press any key to continue.");
+};
 
-  function action() { dispatch({ type: gameEvents.RESET }) }
-
-  return h(Prompt, { message, action })
+function CapsLockIndicator() {
+  return h("strong", { style: "color: red;" }, "CAPS LOCK");
 }
 
-function Prompt({ message, action }) {
+function Prompt({ mode, dispatch }) {
+  if (![gameModes.LOST, gameModes.WON].includes(mode)) return;
+
   const nbsp = "\u00a0";
-  return (
-    h(
-      "div",
-      { className: "prompt" },
-      h("strong", {}, message),
-      nbsp,
-      h("button", { onClick: action }, "Reset")
-    )
+  const message = mode === gameModes.LOST ? "You failed." : "You succeeded!";
+
+  function action() {
+    dispatch({ type: gameEvents.RESET });
+  }
+
+  return h(
+    "div",
+    { className: "prompt" },
+    h("strong", {}, message),
+    nbsp,
+    h("button", { onClick: action }, "Reset"),
   );
 }
 
@@ -52,11 +71,14 @@ function GameText({ text, position }) {
       h(
         "span",
         {
-          className:
-            index < position ? "typed" : index === position ? "cursor" : "",
+          className: index < position
+            ? "typed"
+            : index === position
+            ? "cursor"
+            : "",
         },
-        char
+        char,
       )
-    )
+    ),
   );
 }

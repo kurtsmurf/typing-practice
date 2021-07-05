@@ -39,7 +39,8 @@ body {
   opacity: 0.2;
 }
 
-.cursor {
+[data-mode="PLAYING"] .cursor,
+[data-mode="LOST"] .cursor {
   background-color: yellow;
   border-radius: 2px;
 }

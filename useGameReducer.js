@@ -6,6 +6,7 @@ export const gameModes = {
   PLAYING: "PLAYING",
   WON: "WON",
   LOST: "LOST",
+  PAUSED: "PAUSED",
 };
 
 export const gameEvents = {
@@ -14,12 +15,14 @@ export const gameEvents = {
   TYPE_INCORRECT_KEY: "TYPE_INCORRECT_KEY",
   REACH_END: "REACH_END",
   RESET: "RESET",
+  PAUSE: "PAUSE",
+  RESUME: "RESUME",
 };
 
 export function useGameReducer(text) {
   const initialState = {
     text,
-    mode: gameModes.PLAYING,
+    mode: gameModes.PAUSED,
     position: 0,
   };
 
@@ -36,8 +39,8 @@ export function useGameReducer(text) {
         return isLastPosition && isCorrect
           ? reducer(state, { type: gameEvents.REACH_END })
           : isCorrect
-            ? reducer(state, { type: gameEvents.TYPE_CORRECT_KEY })
-            : reducer(state, { type: gameEvents.TYPE_INCORRECT_KEY });
+          ? reducer(state, { type: gameEvents.TYPE_CORRECT_KEY })
+          : reducer(state, { type: gameEvents.TYPE_INCORRECT_KEY });
       },
       [gameEvents.TYPE_CORRECT_KEY]: (state) => ({
         ...state,
@@ -57,12 +60,22 @@ export function useGameReducer(text) {
         };
       },
       [gameEvents.RESET]: () => initialState,
+      [gameEvents.PAUSE]: (state) => ({
+        ...state,
+        mode: gameModes.PAUSED,
+      }),
     },
     [gameModes.WON]: {
       [gameEvents.RESET]: () => initialState,
     },
     [gameModes.LOST]: {
       [gameEvents.RESET]: () => initialState,
+    },
+    [gameModes.PAUSED]: {
+      [gameEvents.RESUME]: (state) => ({
+        ...state,
+        mode: gameModes.PLAYING,
+      }),
     },
   };
 
