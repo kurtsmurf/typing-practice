@@ -7,10 +7,8 @@ import { useWindowEventListener } from "./useWindowEventListener.js";
 
 export function Game({ text }) {
   const [state, dispatch] = useGameReducer(text);
-
-  useWindowEventListener("keydown", (e) => dispatch({ type: gameEvents.KEY_DOWN, e }));
-
   const windowHasFocus = useWindowFocusDetection()
+  const capsLockIsOn = useCapsLockDetection()
 
   useEffect(() => {
     if (!windowHasFocus) {
@@ -18,28 +16,26 @@ export function Game({ text }) {
     }
   }, [windowHasFocus])
 
+  useWindowEventListener("keydown", (e) => dispatch({ type: gameEvents.KEY_DOWN, e }));
+
   return h(
     "div",
     { "data-mode": state.mode },
-    h(CapsLockIndicator),
+    state.mode !== gameModes.PAUSED && capsLockIsOn && h(CapsLockIndicator),
+    state.mode === gameModes.PAUSED && h(ResumePrompt, { dispatch }),
     h(Prompt, { mode: state.mode, dispatch }),
     h(GameText, { text: state.text, position: state.position }),
-    state.mode === gameModes.PAUSED && h(ResumePrompt, { dispatch })
   );
 }
 
 const ResumePrompt = ({ dispatch }) => {
   useWindowEventListener("keypress", () => dispatch({ type: gameEvents.RESUME }))
 
-  return h("div", {
-    style: "color: lightgrey;"
-  }, "Press any key to resume.")
+  return h("div", {}, "Press any key to continue.")
 }
 
 function CapsLockIndicator() {
-  const capsLockIsOn = useCapsLockDetection()
-
-  return capsLockIsOn && h("strong", { style: "color: red;" }, "CAPS LOCK")
+  return h("strong", { style: "color: red;" }, "CAPS LOCK")
 }
 
 function Prompt({ mode, dispatch }) {

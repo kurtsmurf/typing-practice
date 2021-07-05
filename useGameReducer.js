@@ -22,7 +22,7 @@ export const gameEvents = {
 export function useGameReducer(text) {
   const initialState = {
     text,
-    mode: gameModes.PLAYING,
+    mode: gameModes.PAUSED,
     position: 0,
   };
 
