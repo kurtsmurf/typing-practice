@@ -11,6 +11,7 @@ It trains you to prioritize accuracy - nobody cares how fast you can run into a 
 
 ## fix me
 
+1. Make game focusable, only accept input when it has focus
 1. Put useGameReducer in a context
 1. ~~caps-lock indicator~~
 1. ~~"press any key to start": disabled mode for when returning from offline or starting from scratch.~~
