@@ -1,19 +1,14 @@
 import { useEffect, useState } from "https://cdn.skypack.dev/preact/hooks";
+import { useWindowEventListener } from "./useWindowEventListener.js"
 
 export const useCapsLockDetection = () => {
   const [capsLockIsOn, setCapsLockIsOn] = useState(undefined);
 
   const onKeyDown = (e) => {
-    const isCapsLockModifier = e.getModifierState("CapsLock");
-    const isCapsLockKey = e.key === "CapsLock";
-
-    setCapsLockIsOn(isCapsLockModifier !== isCapsLockKey);
+    setCapsLockIsOn(e.getModifierState && e.getModifierState( 'CapsLock' ));
   };
-
-  useEffect(() => {
-    document.body.addEventListener("keydown", onKeyDown);
-    return () => document.body.removeEventListener("keydown", onKeyDown);
-  }, [setCapsLockIsOn]);
-
+  
+  useWindowEventListener("keydown", onKeyDown);
+  
   return capsLockIsOn;
 };
