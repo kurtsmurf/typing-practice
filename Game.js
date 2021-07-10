@@ -26,9 +26,17 @@ export function Game({ text }) {
     { "data-mode": state.mode },
     state.mode !== gameModes.PAUSED && capsLockIsOn && h(CapsLockIndicator),
     state.mode === gameModes.PAUSED && h(ResumePrompt, { dispatch }),
-    h(Prompt, { mode: state.mode, dispatch }),
+    state.mode === gameModes.PLAYING && h(Percent, { state }),
+    h(ResetPrompt, { mode: state.mode, dispatch }),
     h(GameText, { text: state.text, position: state.position }),
   );
+}
+
+const Percent = ({ state }) => {
+  const percent = state.position / state.text.length;
+  const clean = Math.round(100 * percent);
+
+  return h("strong", {}, clean + "%")
 }
 
 const ResumePrompt = ({ dispatch }) => {
@@ -44,7 +52,7 @@ function CapsLockIndicator() {
   return h("strong", { style: "color: red;" }, "caps lock");
 }
 
-function Prompt({ mode, dispatch }) {
+function ResetPrompt({ mode, dispatch }) {
   if (![gameModes.LOST, gameModes.WON].includes(mode)) return;
 
   const nbsp = "\u00a0";
