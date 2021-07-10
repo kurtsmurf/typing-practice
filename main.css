@@ -32,6 +32,15 @@ body {
   height: 100%;
 }
 
+.heads-up-display {
+  display: flex;
+  justify-content: space-between;
+}
+
+.caps-lock-warning {
+  color: hsl(0, 100%, 62%)
+}
+
 /* game */
 
 .typed {
@@ -41,7 +50,7 @@ body {
 
 [data-mode="PLAYING"] .cursor,
 [data-mode="LOST"] .cursor {
-  background-color: yellow;
+  background-color: rgb(255, 224, 87);
   border-radius: 2px;
 }
 

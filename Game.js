@@ -24,20 +24,26 @@ export function Game({ text }) {
   return h(
     "div",
     { "data-mode": state.mode },
-    state.mode !== gameModes.PAUSED && capsLockIsOn && h(CapsLockIndicator),
-    state.mode === gameModes.PAUSED && h(ResumePrompt, { dispatch }),
-    state.mode === gameModes.PLAYING && h(Percent, { state }),
-    h(ResetPrompt, { mode: state.mode, dispatch }),
-    h(GameText, { text: state.text, position: state.position }),
+    h(
+      "div",
+      { style: "height: 1.4rem;" }, // PromptOrHeadsUpDisplay
+      state.mode === gameModes.PAUSED && h(ResumePrompt, { dispatch }),
+      [gameModes.LOST, gameModes.WON].includes(state.mode) &&
+        h(ResetPrompt, { state, dispatch }),
+      state.mode === gameModes.PLAYING &&
+        h(
+          "div",
+          { className: "heads-up-display" }, // HeadsUpDisplay
+          h(ProgressIndicator, { state }),
+          capsLockIsOn && h(CapsLockWarning),
+        ),
+    ),
+    h(GameText, { state }),
   );
 }
 
-const Percent = ({ state }) => {
-  const percent = state.position / state.text.length;
-  const clean = Math.round(100 * percent);
-
-  return h("strong", {}, clean + "%")
-}
+const CapsLockWarning = () =>
+  h("strong", { className: "caps-lock-warning" }, "caps lock");
 
 const ResumePrompt = ({ dispatch }) => {
   useWindowEventListener(
@@ -48,15 +54,18 @@ const ResumePrompt = ({ dispatch }) => {
   return h("strong", {}, "Press any key to continue.");
 };
 
-function CapsLockIndicator() {
-  return h("strong", { style: "color: red;" }, "caps lock");
-}
+const ProgressIndicator = ({ state }) => {
+  const ratio = state.position / state.text.length;
+  const percent = Math.round(100 * ratio);
 
-function ResetPrompt({ mode, dispatch }) {
-  if (![gameModes.LOST, gameModes.WON].includes(mode)) return;
+  return h("strong", {}, percent + "%");
+};
 
+const ResetPrompt = ({ state, dispatch }) => {
   const nbsp = "\u00a0";
-  const message = mode === gameModes.LOST ? "You failed." : "You succeeded!";
+  const message = state.mode === gameModes.LOST
+    ? "You failed."
+    : "You succeeded!";
 
   function action() {
     dispatch({ type: gameEvents.RESET });
@@ -69,19 +78,17 @@ function ResetPrompt({ mode, dispatch }) {
     nbsp,
     h("button", { onClick: action }, "Reset"),
   );
-}
+};
 
-function GameText({ text, position }) {
+const GameText = ({ state }) => {
   return h(
     "div",
     { className: "text" },
-    text.split("").map((char, index) =>
+    state.text.split("").map((char, index) =>
       h(
         "span",
         {
-          className: index < position
-            ? "typed"
-            : index === position
+          className: index < state.position ? "typed" : index === state.position
             ? "cursor"
             : "",
         },
@@ -89,4 +96,4 @@ function GameText({ text, position }) {
       )
     ),
   );
-}
+};
