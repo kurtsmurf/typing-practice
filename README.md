@@ -9,17 +9,16 @@ When you have to go back to the beginning every time you type the wrong key, the
 
 It trains you to prioritize accuracy - nobody cares how fast you can run into a brick wall.
 
-## fix me
+## to do 
 
-1. Make game focusable, only accept input when it has focus
-1. Put useGameReducer in a context
+1. make game surface focusable, only accept input when it has focus
+1. when cursor reaches space at end of line, highlight from end-of-current-line to offscreen-right, and from offscreen-left to beginning-of-next-line
+1. handle text too large for screen
+1. focus reset button on game over (make focus transitions more intuitive in general)
+1. show mis-typed key on lose 
+1. apply color to percent and cursor based on progress
 1. ~~caps-lock indicator~~
 1. ~~"press any key to start": disabled mode for when returning from offline or starting from scratch.~~
-1. focus reset button on game over (make focus transitions more intuitive in general)
-1. special highlight when cursor reaches end of line (right now shows nothing)
-1. show mis-typed key on failure
-1. test contrast
-1. handle text too large for screen
 
 ## ideas
 
