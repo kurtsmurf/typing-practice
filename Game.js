@@ -81,6 +81,8 @@ const ResetPrompt = ({ state, dispatch }) => {
 };
 
 const GameText = ({ state }) => {
+  const isSpace = state.text[state.position] === " "
+
   return h(
     "div",
     { className: "text" },
@@ -88,12 +90,18 @@ const GameText = ({ state }) => {
       h(
         "span",
         {
-          className: index < state.position ? "typed" : index === state.position
-            ? "cursor"
-            : "",
+          className: fromClassNameList(
+            index < state.position && "typed",
+            isSpace && "space",
+            index === state.position && "cursor"
+          )
         },
         char,
       )
     ),
   );
 };
+
+const fromClassNameList = (...classNames) => {
+  return classNames.filter(n => !!n).join(" ")
+}

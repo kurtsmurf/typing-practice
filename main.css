@@ -54,6 +54,20 @@ body {
   border-radius: 2px;
 }
 
+[data-mode="PLAYING"] .cursor.space,
+[data-mode="LOST"] .cursor.space {
+  background-color: white;
+}
+
+[data-mode="PLAYING"] .cursor.space::before,
+[data-mode="LOST"] .cursor.space::before {
+  content: "!"; /* this is probably bad - use exclamation point to give pseudo-element width roughly equal to that of a space */
+  color: rgb(255, 224, 87);
+  background-color: rgb(255, 224, 87);
+  position: absolute;
+  border-radius: 2px;
+}
+
 .text {
   transition: opacity 200ms, filter 200ms;
 }
