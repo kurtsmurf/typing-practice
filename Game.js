@@ -1,5 +1,5 @@
 import { h } from "https://cdn.skypack.dev/preact";
-import { useEffect } from "https://cdn.skypack.dev/preact/hooks";
+import { useEffect, useRef } from "https://cdn.skypack.dev/preact/hooks";
 import { gameEvents, gameModes, useGameReducer } from "./useGameReducer.js";
 import { useCapsLockDetection } from "./useCapsLockDetection.js";
 import { useWindowFocusDetection } from "./useWindowFocusDetection.js";
@@ -67,6 +67,12 @@ const ResetPrompt = ({ state, dispatch }) => {
     ? "You failed."
     : "You succeeded!";
 
+  const buttonRef = useRef(null)
+
+  useEffect(() => {
+    if (buttonRef.current) buttonRef.current.focus();
+  }, [buttonRef]);
+
   function action() {
     dispatch({ type: gameEvents.RESET });
   }
@@ -76,7 +82,7 @@ const ResetPrompt = ({ state, dispatch }) => {
     { className: "prompt" },
     h("strong", {}, message),
     nbsp,
-    h("button", { onClick: action }, "Reset"),
+    h("button", { onClick: action, ref: buttonRef }, "Reset"),
   );
 };
 
