@@ -17,6 +17,8 @@ It trains you to prioritize accuracy - nobody cares how fast you can run into a 
 1. focus reset button on game over (make focus transitions more intuitive in general)
 1. show mis-typed key on lose 
 1. show streak count
+1. remember custom text from the last session
+1. show spinner while loading
 1. ?? apply color to percent and cursor based on progress
 1. ~~caps-lock indicator~~
 1. ~~"press any key to start": disabled mode for when returning from offline or starting from scratch.~~
