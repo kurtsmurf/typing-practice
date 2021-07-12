@@ -14,7 +14,7 @@ It trains you to prioritize accuracy - nobody cares how fast you can run into a 
 1. make game surface focusable, only accept input when it has focus
 1. ~~when cursor reaches space at end of line, highlight from end-of-current-line to offscreen-right, and from offscreen-left to beginning-of-next-line~~ used ::after pseudo-class for cursor on space instead
 1. handle text too large for screen
-1. focus reset button on game over (make focus transitions more intuitive in general)
+1. ~~focus reset button on game over (make focus transitions more intuitive in general)~~
 1. show mis-typed key on lose 
 1. show streak count
 1. remember custom text from the last session

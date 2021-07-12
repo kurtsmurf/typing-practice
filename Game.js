@@ -26,7 +26,7 @@ export function Game({ text }) {
     { "data-mode": state.mode },
     h(
       "div",
-      { style: "height: 1.4rem;" }, // PromptOrHeadsUpDisplay
+      { style: "min-height: 1.4rem;" }, // PromptOrHeadsUpDisplay
       state.mode === gameModes.PAUSED && h(ResumePrompt, { dispatch }),
       [gameModes.LOST, gameModes.WON].includes(state.mode) &&
         h(ResetPrompt, { state, dispatch }),

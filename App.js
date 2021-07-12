@@ -36,6 +36,7 @@ function GameView({ state, dispatch }) {
 
 function EditorView({ state, dispatch }) {
   const [text, setText] = useState(state.text);
+  const cancelButtonRef = useRef(null)
 
   function Controls() {
     return h(
@@ -43,6 +44,7 @@ function EditorView({ state, dispatch }) {
       {},
       h("button", {
         onClick: () => dispatch({ type: appEvents.CANCEL }),
+	ref: cancelButtonRef,
       }, "Cancel"),
       h("button", {
         onClick: () => dispatch({ type: appEvents.SAVE, data: { text: text } }),
@@ -63,6 +65,7 @@ function EditorView({ state, dispatch }) {
   function Editor() {
     return h("textarea", {
       onChange: (e) => setText(e.target.value),
+      onBlur: () => cancelButtonRef.current.focus(), // Forcing focus on cancel button when tab out of textarea
       value: text,
       ref: textAreaRef,
     });
