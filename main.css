@@ -70,6 +70,7 @@ body {
 
 .text {
   transition: opacity 200ms, filter 200ms;
+  font-variant-ligatures: none;
 }
 
 [data-mode="LOST"] .text {
