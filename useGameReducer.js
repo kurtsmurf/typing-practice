@@ -24,6 +24,7 @@ export function useGameReducer(text) {
     text,
     mode: gameModes.PAUSED,
     position: 0,
+    keyOfDeath: undefined,
   };
 
   const transitions = {
@@ -40,15 +41,16 @@ export function useGameReducer(text) {
           ? reducer(state, { type: gameEvents.REACH_END })
           : isCorrect
           ? reducer(state, { type: gameEvents.TYPE_CORRECT_KEY })
-          : reducer(state, { type: gameEvents.TYPE_INCORRECT_KEY });
+          : reducer(state, { type: gameEvents.TYPE_INCORRECT_KEY, key: event.e.key });
       },
       [gameEvents.TYPE_CORRECT_KEY]: (state) => ({
         ...state,
         position: state.position + 1,
       }),
-      [gameEvents.TYPE_INCORRECT_KEY]: (state) => ({
+      [gameEvents.TYPE_INCORRECT_KEY]: (state, event) => ({
         ...state,
         mode: gameModes.LOST,
+        keyOfDeath: event.key
       }),
       [gameEvents.REACH_END]: (state) => {
         canvasConfetti();

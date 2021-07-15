@@ -63,9 +63,12 @@ const ProgressIndicator = ({ state }) => {
 
 const ResetPrompt = ({ state, dispatch }) => {
   const nbsp = "\u00a0";
+  const wrongKey = state.keyOfDeath.trim() || "space"
   const message = state.mode === gameModes.LOST
-    ? "You failed."
-    : "You succeeded!";
+    ? `You failed (${wrongKey}).`
+    : state.mode === gameModes.WON
+    ? "You succeeded!"
+    : "";
 
   const buttonRef = useRef(null)
 
