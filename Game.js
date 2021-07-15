@@ -26,33 +26,27 @@ export function Game({ text }) {
     { "data-mode": state.mode },
     h(
       "div",
-      { style: "min-height: 1.4rem;" }, // PromptOrHeadsUpDisplay
-      state.mode === gameModes.PAUSED && h(ResumePrompt, { dispatch }),
-      [gameModes.LOST, gameModes.WON].includes(state.mode) &&
-        h(ResetPrompt, { state, dispatch }),
-      state.mode === gameModes.PLAYING &&
-        h(
-          "div",
-          { className: "heads-up-display" }, // HeadsUpDisplay
-          h(ProgressIndicator, { state }),
-          capsLockIsOn && h(CapsLockWarning),
-        ),
+      { style: "min-height: 1.4rem;" },
+      state.mode === gameModes.PAUSED && h(PausedPrompt, { dispatch }),
+      state.mode === gameModes.LOST && h(LostPrompt, { state, dispatch }),
+      state.mode === gameModes.WON && h(WonPrompt, { state, dispatch }),
+      state.mode === gameModes.PLAYING && h(HeadsUpDisplay, { state, capsLockIsOn }),
     ),
     h(GameText, { state }),
   );
 }
 
+const HeadsUpDisplay = ({ state, capsLockIsOn }) => (
+  h(
+    "div",
+    { className: "heads-up-display" },
+    h(ProgressIndicator, { state }),
+    capsLockIsOn && h(CapsLockWarning),
+  )
+)
+
 const CapsLockWarning = () =>
   h("strong", { className: "caps-lock-warning" }, "caps lock");
-
-const ResumePrompt = ({ dispatch }) => {
-  useWindowEventListener(
-    "keypress",
-    () => dispatch({ type: gameEvents.RESUME }),
-  );
-
-  return h("strong", {}, "Press any key to continue.");
-};
 
 const ProgressIndicator = ({ state }) => {
   const ratio = state.position / state.text.length;
@@ -61,33 +55,54 @@ const ProgressIndicator = ({ state }) => {
   return h("strong", {}, percent + "%");
 };
 
-const ResetPrompt = ({ state, dispatch }) => {
-  const nbsp = "\u00a0";
+const nbsp = "\u00a0";
+
+const PausedPrompt = ({ dispatch }) => {
+  useWindowEventListener(
+    "keypress",
+    () => dispatch({ type: gameEvents.RESUME }),
+  );
+
+  return h("strong", {}, "Press any key to continue.");
+};
+
+const LostPrompt = ({state, dispatch}) => {
   const wrongKey = state.keyOfDeath.trim() || "space"
-  const message = state.mode === gameModes.LOST
-    ? `You failed (${wrongKey}).`
-    : state.mode === gameModes.WON
-    ? "You succeeded!"
-    : "";
-
-  const buttonRef = useRef(null)
-
-  useEffect(() => {
-    if (buttonRef.current) buttonRef.current.focus();
-  }, [buttonRef]);
-
-  function action() {
-    dispatch({ type: gameEvents.RESET });
-  }
+  const message = `You failed (${wrongKey}).`
 
   return h(
     "div",
     { className: "prompt" },
     h("strong", {}, message),
     nbsp,
-    h("button", { onClick: action, ref: buttonRef }, "Reset"),
+    h(ResetButton, { dispatch }),
+  );
+
+}
+
+const WonPrompt = ({ dispatch }) => {
+  const message = "You succeeded!"
+
+  return h(
+    "div",
+    { className: "prompt" },
+    h("strong", {}, message),
+    nbsp,
+    h(ResetButton, { dispatch }),
   );
 };
+
+const ResetButton = ({dispatch}) => {
+  const buttonRef = useRef(null)
+
+  useEffect(() => {
+    if (buttonRef.current) buttonRef.current.focus();
+  }, [buttonRef]);
+
+  const action = () => dispatch({ type: gameEvents.RESET });
+
+  return h("button", { onClick: action, ref: buttonRef }, "Reset")
+}
 
 const GameText = ({ state }) => {
   const isSpace = state.text[state.position] === " "
