@@ -8,7 +8,7 @@ import { Game } from "./Game.js";
 import { appEvents, appModes, useAppReducer } from "./useAppReducer.js";
 import autosize from "https://cdn.skypack.dev/autosize";
 
-export function App() {
+export const App = () => {
   const [state, dispatch] = useAppReducer();
 
   if (state.mode === appModes.GAME) {
@@ -18,40 +18,45 @@ export function App() {
   } else {
     return "Ya broken!!";
   }
-}
+};
 
-function GameView({ state, dispatch }) {
-  function Controls() {
-    return h(
-      "div",
-      {},
-      h("button", {
-        onClick: () => dispatch({ type: appEvents.EDIT }),
-      }, "Edit"),
-    );
-  }
+const GameView = ({ state, dispatch }) => (
+  h(
+    "div",
+    { id: "game" },
+    h(Game, { text: state.text }),
+    h(GameControls, { dispatch }),
+  )
+);
 
-  return h("div", { id: "game" }, h(Game, { text: state.text }), h(Controls));
-}
+const GameControls = ({ dispatch }) => (
+  h(
+    "div",
+    {},
+    h(
+      "button",
+      { onClick: () => dispatch({ type: appEvents.EDIT }) },
+      "Edit",
+    ),
+  )
+);
 
-function EditorView({ state, dispatch }) {
+const EditorView = ({ state, dispatch }) => {
   const [text, setText] = useState(state.text);
-  const cancelButtonRef = useRef(null);
 
-  function Controls() {
-    return h(
-      "div",
-      {},
-      h("button", {
-        onClick: () => dispatch({ type: appEvents.CANCEL }),
-        ref: cancelButtonRef,
-      }, "Cancel"),
-      h("button", {
-        onClick: () => dispatch({ type: appEvents.SAVE, data: { text: text } }),
-      }, "Save"),
-    );
-  }
+  const cancel = () => dispatch({ type: appEvents.CANCEL });
+  const save = () => dispatch({ type: appEvents.SAVE, data: { text: text } });
+  const onChange = (e) => setText(e.target.value);
 
+  return h(
+    "div",
+    { id: "editor" },
+    h(Editor, { text, onChange }),
+    h(EditorControls, { cancel, save }),
+  );
+};
+
+const Editor = ({ text, onChange }) => {
   const textAreaRef = useRef(null);
 
   useEffect(() => {
@@ -62,14 +67,21 @@ function EditorView({ state, dispatch }) {
     autosize(textAreaRef.current);
   }, [textAreaRef.current, text]);
 
-  function Editor() {
-    return h("textarea", {
-      onChange: (e) => setText(e.target.value),
-      onBlur: () => cancelButtonRef.current.focus(), // Forcing focus on cancel button when tab out of textarea
+  return h(
+    "textarea",
+    {
+      onChange,
       value: text,
       ref: textAreaRef,
-    });
-  }
+    },
+  );
+}
 
-  return h("div", { id: "editor" }, h(Editor), h(Controls));
+const EditorControls = ({ cancel, save }) => {
+  return h(
+    "div",
+    {},
+    h("button", { onClick: cancel }, "Cancel"),
+    h("button", { onClick: save }, "Save"),
+  );
 }
