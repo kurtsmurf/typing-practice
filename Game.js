@@ -30,7 +30,8 @@ export function Game({ text }) {
       state.mode === gameModes.PAUSED && h(PausedPrompt, { dispatch }),
       state.mode === gameModes.LOST && h(LostPrompt, { state, dispatch }),
       state.mode === gameModes.WON && h(WonPrompt, { state, dispatch }),
-      state.mode === gameModes.PLAYING && h(HeadsUpDisplay, { state, capsLockIsOn }),
+      state.mode === gameModes.PLAYING &&
+        h(HeadsUpDisplay, { state, capsLockIsOn }),
     ),
     h(GameText, { state }),
   );
@@ -43,7 +44,7 @@ const HeadsUpDisplay = ({ state, capsLockIsOn }) => (
     h(ProgressIndicator, { state }),
     capsLockIsOn && h(CapsLockWarning),
   )
-)
+);
 
 const CapsLockWarning = () =>
   h("strong", { className: "caps-lock-warning" }, "caps lock");
@@ -66,21 +67,9 @@ const PausedPrompt = ({ dispatch }) => {
   return h("strong", {}, "Press any key to continue.");
 };
 
-const LostPrompt = ({state, dispatch}) => {
-  const wrongKey = state.keyOfDeath.trim() || "space"
-  const message = `You failed (${wrongKey}).`
-
-  return h(
-    "div",
-    { className: "prompt" },
-    h("strong", {}, message),
-    nbsp,
-    h(ResetButton, { dispatch }),
-  );
-}
-
-const WonPrompt = ({ dispatch }) => {
-  const message = "You succeeded!"
+const LostPrompt = ({ state, dispatch }) => {
+  const wrongKey = state.keyOfDeath.trim() || "space";
+  const message = `You failed (${wrongKey}).`;
 
   return h(
     "div",
@@ -91,8 +80,20 @@ const WonPrompt = ({ dispatch }) => {
   );
 };
 
-const ResetButton = ({dispatch}) => {
-  const ref = useRef(null)
+const WonPrompt = ({ dispatch }) => {
+  const message = "You succeeded!";
+
+  return h(
+    "div",
+    { className: "prompt" },
+    h("strong", {}, message),
+    nbsp,
+    h(ResetButton, { dispatch }),
+  );
+};
+
+const ResetButton = ({ dispatch }) => {
+  const ref = useRef(null);
 
   useEffect(() => {
     if (ref.current) ref.current.focus();
@@ -100,11 +101,11 @@ const ResetButton = ({dispatch}) => {
 
   const onClick = () => dispatch({ type: gameEvents.RESET });
 
-  return h("button", { onClick, ref: ref }, "Reset")
-}
+  return h("button", { onClick, ref: ref }, "Reset");
+};
 
 const GameText = ({ state }) => {
-  const isSpace = state.text[state.position] === " "
+  const isSpace = state.text[state.position] === " ";
 
   return h(
     "div",
@@ -116,8 +117,8 @@ const GameText = ({ state }) => {
           className: fromClassNameList(
             index < state.position && "typed",
             isSpace && "space",
-            index === state.position && "cursor"
-          )
+            index === state.position && "cursor",
+          ),
         },
         char,
       )
@@ -126,5 +127,5 @@ const GameText = ({ state }) => {
 };
 
 const fromClassNameList = (...classNames) => {
-  return classNames.filter(n => !!n).join(" ")
-}
+  return classNames.filter((n) => !!n).join(" ");
+};

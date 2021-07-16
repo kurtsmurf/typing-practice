@@ -36,7 +36,7 @@ function GameView({ state, dispatch }) {
 
 function EditorView({ state, dispatch }) {
   const [text, setText] = useState(state.text);
-  const cancelButtonRef = useRef(null)
+  const cancelButtonRef = useRef(null);
 
   function Controls() {
     return h(
@@ -44,7 +44,7 @@ function EditorView({ state, dispatch }) {
       {},
       h("button", {
         onClick: () => dispatch({ type: appEvents.CANCEL }),
-	ref: cancelButtonRef,
+        ref: cancelButtonRef,
       }, "Cancel"),
       h("button", {
         onClick: () => dispatch({ type: appEvents.SAVE, data: { text: text } }),

@@ -39,18 +39,18 @@ export const useGameReducer = (text) => {
           LOSE: (state, keyOfDeath) => ({
             ...state,
             mode: gameModes.LOST,
-            keyOfDeath
+            keyOfDeath,
           }),
           WIN: (state) => {
             canvasConfetti();
-    
+
             return {
               ...state,
               mode: gameModes.WON,
               position: state.position + 1,
             };
-          },    
-        }
+          },
+        };
 
         const isCorrect = event.e.key === state.text[state.position];
         const isLastPosition = state.position === state.text.length - 1;
@@ -59,7 +59,7 @@ export const useGameReducer = (text) => {
           ? transitions.WIN(state)
           : isCorrect
           ? transitions.ADVANCE(state)
-          : transitions.LOSE(state, event.e.key)
+          : transitions.LOSE(state, event.e.key);
       },
       [gameEvents.RESET]: () => initialState,
       [gameEvents.PAUSE]: (state) => ({
@@ -84,7 +84,7 @@ export const useGameReducer = (text) => {
   const reducer = (state, event) => {
     const transition = transitions[state.mode][event.type];
     return transition ? transition(state, event) : state;
-  }
+  };
 
   return useReducer(reducer, initialState);
-}
+};
