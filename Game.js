@@ -77,7 +77,6 @@ const LostPrompt = ({state, dispatch}) => {
     nbsp,
     h(ResetButton, { dispatch }),
   );
-
 }
 
 const WonPrompt = ({ dispatch }) => {
@@ -93,15 +92,15 @@ const WonPrompt = ({ dispatch }) => {
 };
 
 const ResetButton = ({dispatch}) => {
-  const buttonRef = useRef(null)
+  const ref = useRef(null)
 
   useEffect(() => {
-    if (buttonRef.current) buttonRef.current.focus();
-  }, [buttonRef]);
+    if (ref.current) ref.current.focus();
+  }, [ref]);
 
-  const action = () => dispatch({ type: gameEvents.RESET });
+  const onClick = () => dispatch({ type: gameEvents.RESET });
 
-  return h("button", { onClick: action, ref: buttonRef }, "Reset")
+  return h("button", { onClick, ref: ref }, "Reset")
 }
 
 const GameText = ({ state }) => {
