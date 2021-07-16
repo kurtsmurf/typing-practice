@@ -107,22 +107,24 @@ const ResetButton = ({ dispatch }) => {
 const GameText = ({ state }) => {
   const isSpace = state.text[state.position] === " ";
 
+  const GameChar = (char, index) => (
+    h(
+      "span",
+      {
+        className: fromClassNameList(
+          index < state.position && "typed",
+          isSpace && "space",
+          index === state.position && "cursor",
+        ),
+      },
+      char,
+    )
+  );
+
   return h(
     "div",
     { className: "text" },
-    state.text.split("").map((char, index) =>
-      h(
-        "span",
-        {
-          className: fromClassNameList(
-            index < state.position && "typed",
-            isSpace && "space",
-            index === state.position && "cursor",
-          ),
-        },
-        char,
-      )
-    ),
+    state.text.split("").map(GameChar),
   );
 };
 
