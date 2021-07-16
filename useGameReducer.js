@@ -11,15 +11,12 @@ export const gameModes = {
 
 export const gameEvents = {
   KEY_DOWN: "KEY_DOWN",
-  TYPE_CORRECT_KEY: "TYPE_CORRECT_KEY",
-  TYPE_INCORRECT_KEY: "TYPE_INCORRECT_KEY",
-  REACH_END: "REACH_END",
   RESET: "RESET",
   PAUSE: "PAUSE",
   RESUME: "RESUME",
 };
 
-export function useGameReducer(text) {
+export const useGameReducer = (text) => {
   const initialState = {
     text,
     mode: gameModes.PAUSED,
@@ -34,32 +31,35 @@ export function useGameReducer(text) {
           return state;
         }
 
+        const transitions = {
+          ADVANCE: (state) => ({
+            ...state,
+            position: state.position + 1,
+          }),
+          LOSE: (state, keyOfDeath) => ({
+            ...state,
+            mode: gameModes.LOST,
+            keyOfDeath
+          }),
+          WIN: (state) => {
+            canvasConfetti();
+    
+            return {
+              ...state,
+              mode: gameModes.WON,
+              position: state.position + 1,
+            };
+          },    
+        }
+
         const isCorrect = event.e.key === state.text[state.position];
         const isLastPosition = state.position === state.text.length - 1;
 
         return isLastPosition && isCorrect
-          ? reducer(state, { type: gameEvents.REACH_END })
+          ? transitions.WIN(state)
           : isCorrect
-          ? reducer(state, { type: gameEvents.TYPE_CORRECT_KEY })
-          : reducer(state, { type: gameEvents.TYPE_INCORRECT_KEY, key: event.e.key });
-      },
-      [gameEvents.TYPE_CORRECT_KEY]: (state) => ({
-        ...state,
-        position: state.position + 1,
-      }),
-      [gameEvents.TYPE_INCORRECT_KEY]: (state, event) => ({
-        ...state,
-        mode: gameModes.LOST,
-        keyOfDeath: event.key
-      }),
-      [gameEvents.REACH_END]: (state) => {
-        canvasConfetti();
-
-        return {
-          ...state,
-          mode: gameModes.WON,
-          position: state.position + 1,
-        };
+          ? transitions.ADVANCE(state)
+          : transitions.LOSE(state, event.e.key)
       },
       [gameEvents.RESET]: () => initialState,
       [gameEvents.PAUSE]: (state) => ({
@@ -81,7 +81,7 @@ export function useGameReducer(text) {
     },
   };
 
-  function reducer(state, event) {
+  const reducer = (state, event) => {
     const transition = transitions[state.mode][event.type];
     return transition ? transition(state, event) : state;
   }
