@@ -69,7 +69,7 @@ const PausedPrompt = ({ dispatch }) => {
 
 const LostPrompt = ({ state, dispatch }) => {
   const wrongKey = state.keyOfDeath.trim() || "space";
-  const message = `You failed (${wrongKey}).`;
+  const message = `You typed ${wrongKey}.`;
 
   return h(
     "div",
