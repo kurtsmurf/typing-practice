@@ -1,4 +1,4 @@
-import { h } from "https://cdn.skypack.dev/preact";
+import { h, Fragment } from "https://cdn.skypack.dev/preact";
 import {
   useEffect,
   useRef,
@@ -11,13 +11,14 @@ import autosize from "https://cdn.skypack.dev/autosize";
 export const App = () => {
   const [state, dispatch] = useAppReducer();
 
-  if (state.mode === appModes.GAME) {
-    return h(GameView, { state, dispatch });
-  } else if (state.mode === appModes.EDIT) {
-    return h(EditorView, { state, dispatch });
-  } else {
-    return "Ya broken!!";
-  }
+  return (
+    h(
+      Fragment,
+      {},
+      state.mode === appModes.GAME && h(GameView, { state, dispatch }),
+      state.mode === appModes.EDIT && h(EditorView, { state, dispatch })
+    )
+  )
 };
 
 const GameView = ({ state, dispatch }) => (

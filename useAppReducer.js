@@ -11,12 +11,6 @@ export const appEvents = {
   EDIT: "EDIT",
 };
 
-const initialState = {
-  text:
-    "Hello my dude! What is happening? I really would like to know what it is that you think is happening, because I am confused. Specifically, I am confused about what is happening. Can you help me my dude? Many thanks, Eric.",
-  mode: appModes.GAME,
-};
-
 const transitions = {
   [appModes.GAME]: {
     [appEvents.EDIT]: function (state) {
@@ -48,11 +42,28 @@ const transitions = {
   },
 };
 
+const initialState = {
+  text:
+    "Hello my dude! What is happening? I really would like to know what it is that you think is happening, because I am confused. Specifically, I am confused about what is happening. Can you help me my dude? Many thanks, Eric.",
+  mode: appModes.GAME,
+};
+
+const saveText = text => localStorage.setItem("text", text)
+const getSavedText = () => localStorage.getItem("text")
+
+function reducer(state, event) {
+  const transition = transitions[state.mode][event.type];
+  const nextState = transition ? transition(state, event) : state;
+
+  if (nextState.text !== state.text) saveText(nextState.text)
+
+  return nextState
+}
+
 export function useAppReducer() {
-  function reducer(state, event) {
-    const transition = transitions[state.mode][event.type];
-    return transition ? transition(state, event) : state;
-  }
+  const savedText = getSavedText()
+
+  if (savedText) initialState.text = savedText
 
   return useReducer(reducer, initialState);
 }
