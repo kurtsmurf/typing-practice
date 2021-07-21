@@ -24,8 +24,7 @@ body {
   width: min(65ch, var(--max-width));
 }
 
-#game,
-#editor {
+.content {
   display: flex;
   flex-direction: column;
   justify-content: center;

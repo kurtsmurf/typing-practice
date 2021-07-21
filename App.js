@@ -13,8 +13,8 @@ export const App = () => {
 
   return (
     h(
-      Fragment,
-      {},
+      "div",
+      { className: "content" },
       state.mode === appModes.GAME && h(GameView, { state, dispatch }),
       state.mode === appModes.EDIT && h(EditorView, { state, dispatch })
     )
@@ -23,8 +23,8 @@ export const App = () => {
 
 const GameView = ({ state, dispatch }) => (
   h(
-    "div",
-    { id: "game" },
+    Fragment,
+    {},
     h(Game, { text: state.text }),
     h(GameControls, { dispatch }),
   )
@@ -50,8 +50,8 @@ const EditorView = ({ state, dispatch }) => {
   const onChange = (e) => setText(e.target.value);
 
   return h(
-    "div",
-    { id: "editor" },
+    Fragment,
+    {},
     h(Editor, { text, onChange }),
     h(EditorControls, { cancel, save }),
   );
@@ -71,6 +71,7 @@ const Editor = ({ text, onChange }) => {
   return h(
     "textarea",
     {
+      id: "editor",
       onChange,
       value: text,
       ref: textAreaRef,
