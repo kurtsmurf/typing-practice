@@ -26,7 +26,7 @@ export function Game({ text }) {
     { "data-mode": state.mode },
     h(
       "div",
-      { style: "min-height: 1.4rem;" },
+      { style: "min-height: 1.5rem;" },
       state.mode === gameModes.PAUSED && h(PausedPrompt, { dispatch }),
       state.mode === gameModes.LOST && h(LostPrompt, { state, dispatch }),
       state.mode === gameModes.WON && h(WonPrompt, { state, dispatch }),
