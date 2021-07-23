@@ -31,6 +31,26 @@ body {
   height: 100%;
 }
 
+.content * + * {
+  margin-top: .2rem;
+}
+
+button + button {
+  margin-left: .2rem;
+}
+
+button, textarea {
+  border: .1rem solid black;
+}
+
+button {
+  background-color: inherit;
+}
+
+button:focus, textarea:focus {
+  outline: .1rem solid gray;
+}
+
 .heads-up-display {
   display: flex;
   justify-content: space-between;
