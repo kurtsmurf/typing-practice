@@ -76,6 +76,7 @@ button + button {
 }
 
 .text {
+  user-select: none;
   transition: opacity 200ms, filter 200ms;
   font-variant-ligatures: none;
   overflow-wrap: break-word;

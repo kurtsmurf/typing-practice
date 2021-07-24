@@ -105,15 +105,13 @@ const ResetButton = ({ dispatch }) => {
 };
 
 const GameText = ({ state }) => {
-  const isSpace = state.text[state.position] === " ";
-
   const GameChar = (char, index) => (
     h(
       "span",
       {
         className: fromClassNameList(
           index < state.position && "typed",
-          isSpace && "space",
+          char === " " && "space",
           index === state.position && "cursor",
         ),
       },
