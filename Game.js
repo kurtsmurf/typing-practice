@@ -4,6 +4,7 @@ import { gameEvents, gameModes, useGameReducer } from "./useGameReducer.js";
 import { useCapsLockDetection } from "./useCapsLockDetection.js";
 import { useWindowFocusDetection } from "./useWindowFocusDetection.js";
 import { useWindowEventListener } from "./useWindowEventListener.js";
+import canvasConfetti from "https://cdn.skypack.dev/canvas-confetti";
 
 export function Game({ text }) {
   const [state, dispatch] = useGameReducer(text);
@@ -15,6 +16,10 @@ export function Game({ text }) {
       dispatch({ type: gameEvents.PAUSE });
     }
   }, [windowHasFocus]);
+
+  useEffect(() => {
+    if (state.mode === gameModes.WON) canvasConfetti()
+  }, [state.mode])
 
   useWindowEventListener(
     "keydown",
@@ -30,8 +35,7 @@ export function Game({ text }) {
       state.mode === gameModes.PAUSED && h(PausedPrompt, { dispatch }),
       state.mode === gameModes.LOST && h(LostPrompt, { state, dispatch }),
       state.mode === gameModes.WON && h(WonPrompt, { state, dispatch }),
-      state.mode === gameModes.PLAYING &&
-        h(HeadsUpDisplay, { state, capsLockIsOn }),
+      state.mode === gameModes.PLAYING && h(HeadsUpDisplay, { state, capsLockIsOn }),
     ),
     h(GameText, { state }),
   );

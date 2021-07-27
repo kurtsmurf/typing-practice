@@ -1,5 +1,4 @@
 import { useReducer } from "https://cdn.skypack.dev/preact/hooks";
-import canvasConfetti from "https://cdn.skypack.dev/canvas-confetti";
 import { isValidKeyEvent } from "./utils.js";
 
 export const gameModes = {
@@ -41,15 +40,11 @@ export const useGameReducer = (text) => {
             mode: gameModes.LOST,
             keyOfDeath,
           }),
-          WIN: (state) => {
-            canvasConfetti();
-
-            return {
-              ...state,
-              mode: gameModes.WON,
-              position: state.position + 1,
-            };
-          },
+          WIN: (state) => ({
+            ...state,
+            mode: gameModes.WON,
+            position: state.position + 1,
+          }),
         };
 
         const isCorrect = event.e.key === state.text[state.position];
