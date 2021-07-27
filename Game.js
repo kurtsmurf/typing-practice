@@ -9,7 +9,6 @@ import canvasConfetti from "https://cdn.skypack.dev/canvas-confetti";
 export function Game({ text }) {
   const [state, dispatch] = useGameReducer(text);
   const windowHasFocus = useWindowFocusDetection();
-  const capsLockIsOn = useCapsLockDetection();
 
   useEffect(() => {
     if (!windowHasFocus) {
@@ -29,6 +28,15 @@ export function Game({ text }) {
   return h(
     "div",
     { "data-mode": state.mode },
+    h(TopBar, { state, dispatch }),
+    h(GameText, { state }),
+  );
+}
+
+const TopBar = ({ state, dispatch }) => {
+  const capsLockIsOn = useCapsLockDetection();
+
+  return (
     h(
       "div",
       { style: "min-height: 1.5rem;" },
@@ -36,9 +44,8 @@ export function Game({ text }) {
       state.mode === gameModes.LOST && h(LostPrompt, { state, dispatch }),
       state.mode === gameModes.WON && h(WonPrompt, { state, dispatch }),
       state.mode === gameModes.PLAYING && h(HeadsUpDisplay, { state, capsLockIsOn }),
-    ),
-    h(GameText, { state }),
-  );
+    )
+  )
 }
 
 const HeadsUpDisplay = ({ state, capsLockIsOn }) => (
@@ -77,7 +84,7 @@ const LostPrompt = ({ state, dispatch }) => {
 
   return h(
     "div",
-    { className: "prompt" },
+    {},
     h("strong", {}, message),
     nbsp,
     h(ResetButton, { dispatch }),
@@ -89,7 +96,7 @@ const WonPrompt = ({ dispatch }) => {
 
   return h(
     "div",
-    { className: "prompt" },
+    {},
     h("strong", {}, message),
     nbsp,
     h(ResetButton, { dispatch }),
