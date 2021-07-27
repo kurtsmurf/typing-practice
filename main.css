@@ -31,7 +31,7 @@ body {
   height: 100%;
 }
 
-.content * + * {
+.content > * + * {
   margin-top: .2rem;
 }
 
