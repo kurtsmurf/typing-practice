@@ -4,6 +4,8 @@ html {
   font-family: "Roboto Slab", "serif";
 }
 
+/* layout */
+
 body {
   height: 100vh;
   margin: 0;
@@ -46,23 +48,26 @@ button + button {
   color: hsl(0, 100%, 62%)
 }
 
+/* game */
+
 .typed {
   transition: opacity 200ms;
   opacity: 0.2;
 }
 
-:is(
-  [data-mode="LOST"],
-  [data-mode="PLAYING"]
-) .cursor {
+[data-mode="PLAYING"] .cursor,
+[data-mode="LOST"] .cursor {
   background-color: rgb(255, 224, 87);
   border-radius: 2px;
 }
 
-:is(
-  [data-mode="LOST"],
-  [data-mode="PLAYING"]
-) .cursor.space::before {
+[data-mode="PLAYING"] .cursor.space,
+[data-mode="LOST"] .cursor.space {
+  background-color: white;
+}
+
+[data-mode="PLAYING"] .cursor.space::before,
+[data-mode="LOST"] .cursor.space::before {
   content: "\00a0";
   color: rgb(255, 224, 87);
   background-color: rgb(255, 224, 87);
