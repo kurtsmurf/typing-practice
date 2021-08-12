@@ -2,32 +2,35 @@ import { h } from "https://cdn.skypack.dev/preact";
 import { useEffect, useRef } from "https://cdn.skypack.dev/preact/hooks";
 import { gameEvents, gameModes, useGameReducer } from "./useGameReducer.js";
 import { useCapsLockDetection } from "./useCapsLockDetection.js";
-import { useWindowFocusDetection } from "./useWindowFocusDetection.js";
-import { useWindowEventListener } from "./useWindowEventListener.js";
 import canvasConfetti from "https://cdn.skypack.dev/canvas-confetti";
+import { useFocusWithinDetection } from "./useFocusWithinDetection.js";
 
 export function Game({ text }) {
   const [state, dispatch] = useGameReducer(text);
-  const windowHasFocus = useWindowFocusDetection();
+  const [ref, hasFocusWithin] = useFocusWithinDetection();
 
   useEffect(() => {
-    if (!windowHasFocus) {
-      dispatch({ type: gameEvents.PAUSE });
-    }
-  }, [windowHasFocus]);
+    if (!hasFocusWithin) dispatch({ type: gameEvents.PAUSE });
+  }, [hasFocusWithin]);
 
   useEffect(() => {
     if (state.mode === gameModes.WON) canvasConfetti()
   }, [state.mode])
 
-  useWindowEventListener(
-    "keydown",
-    (e) => dispatch({ type: gameEvents.KEY_DOWN, e }),
-  );
+  const onKeyDown = state.mode === gameModes.PLAYING
+    ? (e) => dispatch({ type: gameEvents.KEY_DOWN, e })
+    : state.mode === gameModes.PAUSED
+    ? () => dispatch({ type: gameEvents.RESUME })
+    : undefined
 
   return h(
     "div",
-    { "data-mode": state.mode },
+    {
+      "data-mode": state.mode,
+      tabIndex: 0,
+      ref,
+      onKeyDown
+    },
     h(TopBar, { state, dispatch }),
     h(GameText, { state }),
   );
@@ -70,11 +73,6 @@ const ProgressIndicator = ({ state }) => {
 const nbsp = "\u00a0";
 
 const PausedPrompt = ({ dispatch }) => {
-  useWindowEventListener(
-    "keypress",
-    () => dispatch({ type: gameEvents.RESUME }),
-  );
-
   return h("strong", {}, "Press any key to continue.");
 };
 
