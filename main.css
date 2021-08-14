@@ -73,3 +73,13 @@ button + button {
 [data-mode="LOST"] .text {
   filter: blur(1px);
 }
+
+[data-mode] {
+  padding: .4rem;
+  border: .01rem solid;
+  border-radius: .1rem;
+}
+
+[data-mode]:not(:focus-within) {
+  opacity: 0.5;   
+}
