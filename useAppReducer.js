@@ -43,8 +43,7 @@ const transitions = {
 };
 
 const initialState = {
-  text:
-    "Hello my dude! What is happening? I really would like to know what it is that you think is happening, because I am confused. Specifically, I am confused about what is happening. Can you help me my dude? Many thanks, Eric.",
+  text: "Perfect practice makes perfect.",
   mode: appModes.GAME,
 };
 
