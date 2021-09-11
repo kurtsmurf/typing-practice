@@ -1,10 +1,10 @@
-import { h } from "https://cdn.skypack.dev/preact";
-import { useEffect, useRef } from "https://cdn.skypack.dev/preact/hooks";
-import { gameEvents, gameModes, useGameReducer } from "./useGameReducer.ts";
-import { useCapsLockDetection } from "./useCapsLockDetection.ts";
-import { useWindowFocusDetection } from "./useWindowFocusDetection.ts";
-import { useWindowEventListener } from "./useWindowEventListener.ts";
-import canvasConfetti from "https://cdn.skypack.dev/canvas-confetti";
+import { h } from "preact";
+import { useEffect, useRef } from "preact/hooks";
+import { gameEvents, gameModes, useGameReducer } from "./useGameReducer";
+import { useCapsLockDetection } from "./useCapsLockDetection";
+import { useWindowFocusDetection } from "./useWindowFocusDetection";
+import { useWindowEventListener } from "./useWindowEventListener";
+import canvasConfetti from "canvas-confetti";
 
 export function Game({ text }) {
   const [state, dispatch] = useGameReducer(text);

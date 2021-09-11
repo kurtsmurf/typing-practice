@@ -1,12 +1,12 @@
-import { h, Fragment } from "https://cdn.skypack.dev/preact";
+import { h, Fragment } from "preact";
 import {
   useEffect,
   useRef,
   useState,
-} from "https://cdn.skypack.dev/preact/hooks";
-import { Game } from "./Game.ts";
-import { appEvents, appModes, useAppReducer } from "./useAppReducer.ts";
-import autosize from "https://cdn.skypack.dev/autosize";
+} from "preact/hooks";
+import { Game } from "./Game";
+import { appEvents, appModes, useAppReducer } from "./useAppReducer";
+import autosize from "autosize";
 
 export const App = () => {
   const [state, dispatch] = useAppReducer();

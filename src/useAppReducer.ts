@@ -1,4 +1,4 @@
-import { useReducer } from "https://cdn.skypack.dev/preact/hooks";
+import { useReducer } from "preact/hooks";
 
 export const appModes = {
   GAME: "GAME",

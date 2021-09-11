@@ -1,4 +1,4 @@
-import { useEffect } from "https://cdn.skypack.dev/preact/hooks";
+import { useEffect } from "preact/hooks";
 
 export const useWindowEventListener = (event, listener, deps = []) => {
   useEffect(() => {
