@@ -4,8 +4,8 @@ import {
   useRef,
   useState,
 } from "https://cdn.skypack.dev/preact/hooks";
-import { Game } from "./Game.js";
-import { appEvents, appModes, useAppReducer } from "./useAppReducer.js";
+import { Game } from "./Game.ts";
+import { appEvents, appModes, useAppReducer } from "./useAppReducer.ts";
 import autosize from "https://cdn.skypack.dev/autosize";
 
 export const App = () => {

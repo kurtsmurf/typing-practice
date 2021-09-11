@@ -1,5 +1,5 @@
 import { useState } from "https://cdn.skypack.dev/preact/hooks";
-import { useWindowEventListener } from "./useWindowEventListener.js";
+import { useWindowEventListener } from "./useWindowEventListener.ts";
 
 export const useWindowFocusDetection = () => {
   const [hasFocus, setHasFocus] = useState(true);

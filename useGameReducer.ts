@@ -1,5 +1,5 @@
 import { useReducer } from "https://cdn.skypack.dev/preact/hooks";
-import { isValidKeyEvent } from "./utils.js";
+import { isValidKeyEvent } from "./utils.ts";
 
 export const gameModes = {
   PLAYING: "PLAYING",
