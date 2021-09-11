@@ -1,68 +1,78 @@
 import { useReducer } from "preact/hooks";
 
-export const appModes = {
-  GAME: "GAME",
-  EDIT: "EDIT",
-};
+export type appMode = "GAME" | "EDIT";
+export type appEvent =
+  | { type: "SAVE"; data: { text: string } }
+  | { type: "CANCEL" }
+  | { type: "EDIT" };
+export type appState = { text: string; mode: appMode };
 
-export const appEvents = {
-  SAVE: "SAVE",
-  CANCEL: "CANCEL",
-  EDIT: "EDIT",
-};
+const transitions = (mode: appMode, event: appEvent) =>
+  (state: appState): appState => {
+    switch (mode) {
+      case "GAME": {
+        switch (event.type) {
+          case "EDIT": {
+            return {
+              ...state,
+              mode: "EDIT",
+            };
+          }
+          default: {
+            return state;
+          }
+        }
+      }
+      case "EDIT": {
+        switch (event.type) {
+          case "CANCEL": {
+            return {
+              ...state,
+              mode: "GAME",
+            };
+          }
+          case "SAVE": {
+            const sanitizedText = event.data.text
+              .trim()
+              .replaceAll(/[\s\r\n]+/g, " ");
 
-const transitions = {
-  [appModes.GAME]: {
-    [appEvents.EDIT]: function (state) {
-      return {
-        ...state,
-        mode: appModes.EDIT,
-      };
-    },
-  },
-  [appModes.EDIT]: {
-    [appEvents.SAVE]: function (state, event) {
-      const sanitizedText = event.data.text.trim().replaceAll(
-        /[\s\r\n]+/g,
-        " ",
-      );
+            return {
+              ...state,
+              mode: "GAME",
+              text: sanitizedText || state.text,
+            };
+          }
+          default: {
+            return state;
+          }
+        }
+      }
+      default: {
+        return state;
+      }
+    }
+  };
 
-      return {
-        ...state,
-        mode: appModes.GAME,
-        text: sanitizedText || state.text,
-      };
-    },
-    [appEvents.CANCEL]: function (state) {
-      return {
-        ...state,
-        mode: appModes.GAME,
-      };
-    },
-  },
-};
-
-const initialState = {
+const initialState: appState = {
   text: "Perfect practice makes perfect.",
-  mode: appModes.GAME,
+  mode: "GAME",
 };
 
-const saveText = text => localStorage.setItem("text", text)
-const getSavedText = () => localStorage.getItem("text")
+const saveText = (text: string) => localStorage.setItem("text", text);
+const getSavedText = () => localStorage.getItem("text");
 
-function reducer(state, event) {
-  const transition = transitions[state.mode][event.type];
-  const nextState = transition ? transition(state, event) : state;
+function reducer(state: appState, event: appEvent) {
+  const nextState = transitions(state.mode, event)(state);
 
-  if (nextState.text !== state.text) saveText(nextState.text)
+  if (nextState.text !== state.text) saveText(nextState.text);
 
-  return nextState
+  return nextState;
 }
 
 export function useAppReducer() {
-  const savedText = getSavedText()
+  const savedText = getSavedText();
 
-  if (savedText) initialState.text = savedText
+  if (savedText) initialState.text = savedText;
 
   return useReducer(reducer, initialState);
 }
