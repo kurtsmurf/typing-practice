@@ -2,10 +2,14 @@ import { useReducer } from "preact/hooks";
 
 export type appMode = "GAME" | "EDIT";
 export type appEvent =
-  | { type: "SAVE"; data: { text: string } }
+  | { type: "SAVE"; text: string }
   | { type: "CANCEL" }
   | { type: "EDIT" };
 export type appState = { text: string; mode: appMode };
+
+const sanitizeText = (text: string) => text
+              .trim()
+              .replaceAll(/[\s\r\n]+/g, " ");
 
 const transitions = (mode: appMode, event: appEvent) =>
   (state: appState): appState => {
@@ -32,14 +36,10 @@ const transitions = (mode: appMode, event: appEvent) =>
             };
           }
           case "SAVE": {
-            const sanitizedText = event.data.text
-              .trim()
-              .replaceAll(/[\s\r\n]+/g, " ");
-
             return {
               ...state,
               mode: "GAME",
-              text: sanitizedText || state.text,
+              text: sanitizeText(event.text) || state.text,
             };
           }
           default: {
