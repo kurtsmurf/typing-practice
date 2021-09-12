@@ -1,13 +1,11 @@
-export function isValidKeyEvent(e) {
-  const modifierPressed = (e) => e.altkey || e.ctrlKey || e.metaKey;
-  const isPrintableCharacter = ({ keyCode }) =>
-    (keyCode > 47 && keyCode < 58) || // numbers
-    keyCode == 32 || // spacebar
-    // keyCode == 13 || // return
-    (keyCode > 64 && keyCode < 91) || // letters
-    (keyCode > 95 && keyCode < 112) || // numpad numbers
-    (keyCode > 185 && keyCode < 193) || // ;=,-./`
-    (keyCode > 218 && keyCode < 223); // [\]'
+export function isValidKeyEvent(e: KeyboardEvent) {
+  if (e.altKey || e.ctrlKey || e.metaKey) return;
 
-  return !modifierPressed(e) && isPrintableCharacter(e);
+  return (e.keyCode > 47 && e.keyCode < 58) || // numbers
+    e.keyCode == 32 || // spacebar
+    // e.keyCode == 13 || // return
+    (e.keyCode > 64 && e.keyCode < 91) || // letters
+    (e.keyCode > 95 && e.keyCode < 112) || // numpad numbers
+    (e.keyCode > 185 && e.keyCode < 193) || // ;=,-./`
+    (e.keyCode > 218 && e.keyCode < 223); // [\]'
 }
