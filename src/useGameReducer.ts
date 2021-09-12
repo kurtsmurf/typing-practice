@@ -1,84 +1,118 @@
 import { useReducer } from "preact/hooks";
 import { isValidKeyEvent } from "./utils";
 
-export const gameModes = {
-  PLAYING: "PLAYING",
-  WON: "WON",
-  LOST: "LOST",
-  PAUSED: "PAUSED",
+export type gameMode =
+  | "PLAYING"
+  | "WON"
+  | "LOST"
+  | "PAUSED";
+
+export type gameEvent =
+  | { type: "KEY_DOWN"; keyboardEvent: KeyboardEvent }
+  | { type: "RESET" }
+  | { type: "PAUSE" }
+  | { type: "RESUME" };
+
+export type gameState = {
+  text: string;
+  mode: gameMode;
+  position: number;
+  keyOfDeath: undefined | string;
 };
 
-export const gameEvents = {
-  KEY_DOWN: "KEY_DOWN",
-  RESET: "RESET",
-  PAUSE: "PAUSE",
-  RESUME: "RESUME",
-};
-
-export const useGameReducer = (text) => {
-  const initialState = {
+export const useGameReducer = (text: string) => {
+  const initialState: gameState = {
     text,
-    mode: gameModes.PAUSED,
+    mode: "PAUSED",
     position: 0,
     keyOfDeath: undefined,
   };
 
-  const transitions = {
-    [gameModes.PLAYING]: {
-      [gameEvents.KEY_DOWN]: (state, event) => {
-        if (!isValidKeyEvent(event.e)) {
-          return state;
-        }
+  const keyDownReducer = (state: gameState, event: gameEvent): gameState => {
+    if (event.type !== "KEY_DOWN" || !isValidKeyEvent(event.keyboardEvent)) {
+      return state;
+    }
 
-        const transitions = {
-          ADVANCE: (state) => ({
-            ...state,
-            position: state.position + 1,
-          }),
-          LOSE: (state, keyOfDeath) => ({
-            ...state,
-            mode: gameModes.LOST,
-            keyOfDeath,
-          }),
-          WIN: (state) => ({
-            ...state,
-            mode: gameModes.WON,
-            position: state.position + 1,
-          }),
-        };
+    const isCorrect = event.keyboardEvent.key === state.text[state.position];
+    const isLastPosition = state.position === state.text.length - 1;
 
-        const isCorrect = event.e.key === state.text[state.position];
-        const isLastPosition = state.position === state.text.length - 1;
-
-        return isLastPosition && isCorrect
-          ? transitions.WIN(state)
-          : isCorrect
-          ? transitions.ADVANCE(state)
-          : transitions.LOSE(state, event.e.key);
-      },
-      [gameEvents.RESET]: () => initialState,
-      [gameEvents.PAUSE]: (state) => ({
+    // WIN
+    if (isCorrect && isLastPosition) {
+      return {
         ...state,
-        mode: gameModes.PAUSED,
-      }),
-    },
-    [gameModes.WON]: {
-      [gameEvents.RESET]: () => initialState,
-    },
-    [gameModes.LOST]: {
-      [gameEvents.RESET]: () => initialState,
-    },
-    [gameModes.PAUSED]: {
-      [gameEvents.RESUME]: (state) => ({
+        mode: "WON",
+        position: state.position + 1,
+      };
+    }
+
+    // ADVANCE
+    if (isCorrect) {
+      return {
         ...state,
-        mode: gameModes.PLAYING,
-      }),
-    },
+        position: state.position + 1,
+      };
+    }
+
+    // LOSE
+    return {
+      ...state,
+      mode: "LOST",
+      keyOfDeath: event.keyboardEvent.key,
+    };
   };
 
-  const reducer = (state, event) => {
-    const transition = transitions[state.mode][event.type];
-    return transition ? transition(state, event) : state;
+  const reducer = (state: gameState, event: gameEvent): gameState => {
+    switch (state.mode) {
+      case "LOST": {
+        switch (event.type) {
+          case "RESET": {
+            return initialState;
+          }
+          default: {
+            return state;
+          }
+        }
+      }
+      case "PAUSED": {
+        switch (event.type) {
+          case "RESUME": {
+            return {
+              ...state,
+              mode: "PLAYING",
+            };
+          }
+          default: {
+            return state;
+          }
+        }
+      }
+      case "PLAYING": {
+        switch (event.type) {
+          case "KEY_DOWN": {
+            return keyDownReducer(state, event);
+          }
+          case "PAUSE": {
+            return {
+              ...state,
+              mode: "PAUSED",
+            };
+          }
+          default: {
+            return state;
+          }
+        }
+      }
+      case "WON": {
+        switch (event.type) {
+          case "RESET": {
+            return initialState;
+          }
+          default: {
+            return state;
+          }
+        }
+      }
+    }
   };
 
   return useReducer(reducer, initialState);

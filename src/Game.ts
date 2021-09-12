@@ -1,28 +1,26 @@
-import { h } from "preact";
-import { useEffect, useRef } from "preact/hooks";
-import { gameEvents, gameModes, useGameReducer } from "./useGameReducer";
-import { useCapsLockDetection } from "./useCapsLockDetection";
+import { FunctionComponent, h } from "preact";
+import { useEffect } from "preact/hooks";
+import { gameEvent, gameState, useGameReducer } from "./useGameReducer";
 import { useWindowFocusDetection } from "./useWindowFocusDetection";
 import { useWindowEventListener } from "./useWindowEventListener";
 import canvasConfetti from "canvas-confetti";
 
-export function Game({ text }) {
+export const Game: FunctionComponent<{ text: string }> = ({ text }) => {
   const [state, dispatch] = useGameReducer(text);
   const windowHasFocus = useWindowFocusDetection();
 
   useEffect(() => {
-    if (!windowHasFocus) {
-      dispatch({ type: gameEvents.PAUSE });
-    }
+    if (!windowHasFocus) dispatch({ type: "PAUSE" });
   }, [windowHasFocus]);
 
   useEffect(() => {
-    if (state.mode === gameModes.WON) canvasConfetti();
+    if (state.mode === "WON") canvasConfetti();
   }, [state.mode]);
 
   useWindowEventListener(
     "keydown",
-    (e) => dispatch({ type: gameEvents.KEY_DOWN, e }),
+    (e: Event) =>
+      dispatch({ type: "KEY_DOWN", keyboardEvent: e as KeyboardEvent }), // hmmm...
   );
 
   return h(
@@ -31,37 +29,34 @@ export function Game({ text }) {
     h(TopBar, { state, dispatch }),
     h(GameText, { state }),
   );
-}
+};
 
-const TopBar = ({ state, dispatch }) => {
-  const capsLockIsOn = useCapsLockDetection();
-
+const TopBar: FunctionComponent<
+  { state: gameState; dispatch: (action: gameEvent) => void }
+> = ({ state, dispatch }) => {
   return (
     h(
       "div",
       { style: "min-height: 1.5rem;" },
-      state.mode === gameModes.PAUSED && h(PausedPrompt, { dispatch }),
-      state.mode === gameModes.LOST && h(LostPrompt, { state, dispatch }),
-      state.mode === gameModes.WON && h(WonPrompt, { state, dispatch }),
-      state.mode === gameModes.PLAYING &&
-        h(HeadsUpDisplay, { state, capsLockIsOn }),
+      state.mode === "PAUSED" && h(PausedPrompt, { dispatch }),
+      state.mode === "LOST" && h(LostPrompt, { state, dispatch }),
+      state.mode === "WON" && h(WonPrompt, { dispatch }),
+      state.mode === "PLAYING" && h(HeadsUpDisplay, { state }),
     )
   );
 };
 
-const HeadsUpDisplay = ({ state, capsLockIsOn }) => (
+const HeadsUpDisplay: FunctionComponent<{ state: gameState }> = ({ state }) => (
   h(
     "div",
     { className: "heads-up-display" },
     h(ProgressIndicator, { state }),
-    capsLockIsOn && h(CapsLockWarning),
   )
 );
 
-const CapsLockWarning = () =>
-  h("strong", { className: "caps-lock-warning" }, "caps lock");
-
-const ProgressIndicator = ({ state }) => {
+const ProgressIndicator: FunctionComponent<{ state: gameState }> = (
+  { state },
+) => {
   const ratio = state.position / state.text.length;
   const percent = Math.round(100 * ratio);
 
@@ -70,17 +65,21 @@ const ProgressIndicator = ({ state }) => {
 
 const nbsp = "\u00a0";
 
-const PausedPrompt = ({ dispatch }) => {
+const PausedPrompt: FunctionComponent<
+  { dispatch: (action: gameEvent) => void }
+> = ({ dispatch }) => {
   useWindowEventListener(
     "keypress",
-    () => dispatch({ type: gameEvents.RESUME }),
+    () => dispatch({ type: "RESUME" }),
   );
 
   return h("strong", {}, "Press any key to continue.");
 };
 
-const LostPrompt = ({ state, dispatch }) => {
-  const wrongKey = state.keyOfDeath.trim() ? `"${state.keyOfDeath}"` : "space";
+const LostPrompt: FunctionComponent<
+  { state: gameState; dispatch: (action: gameEvent) => void }
+> = ({ state, dispatch }) => {
+  const wrongKey = state.keyOfDeath?.trim() ? `"${state.keyOfDeath}"` : "space";
   const message = `You typed ${wrongKey}.`;
 
   return h(
@@ -92,32 +91,29 @@ const LostPrompt = ({ state, dispatch }) => {
   );
 };
 
-const WonPrompt = ({ dispatch }) => {
-  const message = "You succeeded!";
+const WonPrompt: FunctionComponent<{ dispatch: (action: gameEvent) => void }> =
+  ({ dispatch }) => {
+    const message = "You succeeded!";
 
-  return h(
-    "div",
-    {},
-    h("strong", {}, message),
-    nbsp,
-    h(ResetButton, { dispatch }),
-  );
+    return h(
+      "div",
+      {},
+      h("strong", {}, message),
+      nbsp,
+      h(ResetButton, { dispatch }),
+    );
+  };
+
+const ResetButton: FunctionComponent<
+  { dispatch: (action: gameEvent) => void }
+> = ({ dispatch }) => {
+  const onClick = () => dispatch({ type: "RESET" });
+
+  return h("button", { onClick }, "Reset");
 };
 
-const ResetButton = ({ dispatch }) => {
-  const ref = useRef(null);
-
-  useEffect(() => {
-    if (ref.current) ref.current.focus();
-  }, [ref]);
-
-  const onClick = () => dispatch({ type: gameEvents.RESET });
-
-  return h("button", { onClick, ref: ref }, "Reset");
-};
-
-const GameText = ({ state }) => {
-  const GameChar = (char, index) => (
+const GameText: FunctionComponent<{ state: gameState }> = ({ state }) => {
+  const GameChar = (char: string, index: number) => (
     h(
       "span",
       {
@@ -138,6 +134,6 @@ const GameText = ({ state }) => {
   );
 };
 
-const fromClassNameList = (...classNames) => {
+const fromClassNameList = (...classNames: (string | boolean)[]) => {
   return classNames.filter((n) => !!n).join(" ");
 };
