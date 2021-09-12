@@ -63,23 +63,12 @@ const EditorView: FunctionComponent<
 const Editor: FunctionComponent<
   { text: string; onChange: (e: Event) => void }
 > = ({ text, onChange }) => {
-  // const textAreaRef = useRef<HTMLTextAreaElement>(null);
-
-  // useEffect(() => {
-  //   if (textAreaRef.current) textAreaRef.current.focus();
-  // }, [textAreaRef]);
-
-  // useEffect(() => {
-  //   textAreaRef.current && autosize<HTMLTextAreaElement>(textAreaRef.current);
-  // }, [textAreaRef.current, text]);
-
   return h(
     "textarea",
     {
       id: "editor",
       onChange,
       value: text,
-      // ref: textAreaRef,
     },
   );
 };
