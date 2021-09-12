@@ -1,8 +1,7 @@
-import { Fragment, FunctionComponent, h, RefObject } from "preact";
-import { useEffect, useRef, useState } from "preact/hooks";
+import { Fragment, FunctionComponent, h } from "preact";
+import { useState } from "preact/hooks";
 import { Game } from "./Game";
-import { appEvent, appMode, appState, useAppReducer } from "./useAppReducer";
-import autosize from "autosize";
+import { appEvent, appState, useAppReducer } from "./useAppReducer";
 
 export const App = () => {
   const [state, dispatch] = useAppReducer();
@@ -48,7 +47,7 @@ const EditorView: FunctionComponent<
   const [text, setText] = useState(state.text);
 
   const cancel = () => dispatch({ type: "CANCEL" });
-  const save = () => dispatch({ type: "SAVE", data: { text: text } });
+  const save = () => dispatch({ type: "SAVE", text });
   const onChange = (e: Event) =>
     setText((<HTMLTextAreaElement> e.target).value);
 

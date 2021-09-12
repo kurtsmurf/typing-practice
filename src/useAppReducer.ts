@@ -7,9 +7,10 @@ export type appEvent =
   | { type: "EDIT" };
 export type appState = { text: string; mode: appMode };
 
-const sanitizeText = (text: string) => text
-              .trim()
-              .replaceAll(/[\s\r\n]+/g, " ");
+const sanitizeText = (text: string) =>
+  text
+    .trim()
+    .replaceAll(/[\s\r\n]+/g, " ");
 
 const transitions = (mode: appMode, event: appEvent) =>
   (state: appState): appState => {
