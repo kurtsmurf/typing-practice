@@ -49,7 +49,7 @@ const EditorView: FunctionComponent<
   const cancel = () => dispatch({ type: "CANCEL" });
   const save = () => dispatch({ type: "SAVE", text });
   const onChange = (e: Event) =>
-    setText((<HTMLTextAreaElement> e.target).value);
+    setText((e.target as HTMLTextAreaElement).value);
 
   return h(
     Fragment,
