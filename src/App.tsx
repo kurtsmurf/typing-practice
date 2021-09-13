@@ -1,44 +1,34 @@
-import { Fragment, FunctionComponent, h } from "preact";
+import { FunctionComponent } from "preact";
 import { useState } from "preact/hooks";
 import { Game } from "./Game";
 import { appEvent, appState, useAppReducer } from "./useAppReducer";
 
-export const App = () => {
+export const App: FunctionComponent = () => {
   const [state, dispatch] = useAppReducer();
 
   return (
-    h(
-      "div",
-      { className: "content" },
-      state.mode === "GAME" && h(GameView, { state, dispatch }),
-      state.mode === "EDIT" && h(EditorView, { state, dispatch }),
-    )
-  );
+    <div className="content">
+      { state.mode === "GAME" && <GameView state={state} dispatch={dispatch} /> }
+      { state.mode === "EDIT" && <EditorView state={state} dispatch={dispatch} /> }
+    </div>
+ );
 };
 
 const GameView: FunctionComponent<
   { state: appState; dispatch: (action: appEvent) => void }
 > = ({ state, dispatch }) => (
-  h(
-    Fragment,
-    {},
-    h(Game, { text: state.text }),
-    h(GameControls, { dispatch }),
-  )
+  <Fragment>
+    <Game text={state.text} />
+    <GameControls dispatch={dispatch} />
+  </Fragment>
 );
 
 const GameControls: FunctionComponent<
   { dispatch: (action: appEvent) => void }
 > = ({ dispatch }) => (
-  h(
-    "div",
-    {},
-    h(
-      "button",
-      { onClick: () => dispatch({ type: "EDIT" }) },
-      "Edit",
-    ),
-  )
+  <div>
+    <button onClick={() => dispatch({ type: "EDIT" })}>Edit</button>
+  </div>
 );
 
 const EditorView: FunctionComponent<
@@ -51,24 +41,19 @@ const EditorView: FunctionComponent<
   const onChange = (e: Event) =>
     setText((e.target as HTMLTextAreaElement).value);
 
-  return h(
-    Fragment,
-    {},
-    h(Editor, { text, onChange }),
-    h(EditorControls, { cancel, save }),
+  return (
+    <Fragment>
+      <Editor text={text} onChange={onChange} />
+      <EditorControls cancel={cancel} save={save} />
+    </Fragment>
   );
 };
 
 const Editor: FunctionComponent<
   { text: string; onChange: (e: Event) => void }
 > = ({ text, onChange }) => {
-  return h(
-    "textarea",
-    {
-      id: "editor",
-      onChange,
-      value: text,
-    },
+  return (
+    <textarea id="editor" onChange={onChange} value={text} />
   );
 };
 
@@ -76,10 +61,10 @@ const EditorControls: FunctionComponent<{
   cancel: () => void;
   save: () => void;
 }> = ({ cancel, save }) => {
-  return h(
-    "div",
-    {},
-    h("button", { onClick: cancel }, "Cancel"),
-    h("button", { onClick: save }, "Save"),
+  return (
+    <div>
+      <button onClick={cancel}>Cancel</button>
+      <button onClick={save}>Save</button>
+    </div>
   );
 };

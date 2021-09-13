@@ -1,4 +1,4 @@
-import { FunctionComponent, h } from "preact";
+import { FunctionComponent } from "preact";
 import { useEffect } from "preact/hooks";
 import { gameEvent, gameState, useGameReducer } from "./useGameReducer";
 import { useWindowFocusDetection } from "./useWindowFocusDetection";
