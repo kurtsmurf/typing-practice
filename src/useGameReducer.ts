@@ -20,100 +20,102 @@ export type gameState = {
   keyOfDeath: undefined | string;
 };
 
-export const useGameReducer = (text: string) => {
-  const initialState: gameState = {
-    text,
-    mode: "PAUSED",
-    position: 0,
-    keyOfDeath: undefined,
-  };
+const initialState: gameState = {
+  text: "", // Initial state text will be provided on load
+  mode: "PAUSED",
+  position: 0,
+  keyOfDeath: undefined,
+};
 
-  const keyDownReducer = (state: gameState, event: gameEvent): gameState => {
-    if (event.type !== "KEY_DOWN" || !isValidKeyEvent(event.keyboardEvent)) {
-      return state;
-    }
+const keyDownReducer = (state: gameState, event: gameEvent): gameState => {
+  if (event.type !== "KEY_DOWN" || !isValidKeyEvent(event.keyboardEvent)) {
+    return state;
+  }
 
-    const isCorrect = event.keyboardEvent.key === state.text[state.position];
-    const isLastPosition = state.position === state.text.length - 1;
+  const isCorrect = event.keyboardEvent.key === state.text[state.position];
+  const isLastPosition = state.position === state.text.length - 1;
 
-    // WIN
-    if (isCorrect && isLastPosition) {
-      return {
-        ...state,
-        mode: "WON",
-        position: state.position + 1,
-      };
-    }
-
-    // ADVANCE
-    if (isCorrect) {
-      return {
-        ...state,
-        position: state.position + 1,
-      };
-    }
-
-    // LOSE
+  // WIN
+  if (isCorrect && isLastPosition) {
     return {
       ...state,
-      mode: "LOST",
-      keyOfDeath: event.keyboardEvent.key,
+      mode: "WON",
+      position: state.position + 1,
     };
-  };
+  }
 
-  const reducer = (state: gameState, event: gameEvent): gameState => {
-    switch (state.mode) {
-      case "LOST": {
-        switch (event.type) {
-          case "RESET": {
-            return initialState;
-          }
-          default: {
-            return state;
-          }
+  // ADVANCE
+  if (isCorrect) {
+    return {
+      ...state,
+      position: state.position + 1,
+    };
+  }
+
+  // LOSE
+  return {
+    ...state,
+    mode: "LOST",
+    keyOfDeath: event.keyboardEvent.key,
+  };
+};
+
+const reducer = (state: gameState, event: gameEvent): gameState => {
+  switch (state.mode) {
+    case "LOST": {
+      switch (event.type) {
+        case "RESET": {
+          return initialState;
         }
-      }
-      case "PAUSED": {
-        switch (event.type) {
-          case "RESUME": {
-            return {
-              ...state,
-              mode: "PLAYING",
-            };
-          }
-          default: {
-            return state;
-          }
-        }
-      }
-      case "PLAYING": {
-        switch (event.type) {
-          case "KEY_DOWN": {
-            return keyDownReducer(state, event);
-          }
-          case "PAUSE": {
-            return {
-              ...state,
-              mode: "PAUSED",
-            };
-          }
-          default: {
-            return state;
-          }
-        }
-      }
-      case "WON": {
-        switch (event.type) {
-          case "RESET": {
-            return initialState;
-          }
-          default: {
-            return state;
-          }
+        default: {
+          return state;
         }
       }
     }
-  };
+    case "PAUSED": {
+      switch (event.type) {
+        case "RESUME": {
+          return {
+            ...state,
+            mode: "PLAYING",
+          };
+        }
+        default: {
+          return state;
+        }
+      }
+    }
+    case "PLAYING": {
+      switch (event.type) {
+        case "KEY_DOWN": {
+          return keyDownReducer(state, event);
+        }
+        case "PAUSE": {
+          return {
+            ...state,
+            mode: "PAUSED",
+          };
+        }
+        default: {
+          return state;
+        }
+      }
+    }
+    case "WON": {
+      switch (event.type) {
+        case "RESET": {
+          return initialState;
+        }
+        default: {
+          return state;
+        }
+      }
+    }
+  }
+};
 
+
+export const useGameReducer = (text: string) => {
+  initialState.text = text;
   return useReducer(reducer, initialState);
 };
