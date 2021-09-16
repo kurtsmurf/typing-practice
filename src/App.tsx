@@ -8,19 +8,20 @@ export const App: FunctionComponent = () => {
 
   return (
     <div className="content">
-      { state.mode === "GAME" && <GameView state={state} dispatch={dispatch} /> }
-      { state.mode === "EDIT" && <EditorView state={state} dispatch={dispatch} /> }
+      {state.mode === "GAME" && <GameView state={state} dispatch={dispatch} />}
+      {state.mode === "EDIT" &&
+        <EditorView state={state} dispatch={dispatch} />}
     </div>
- );
+  );
 };
 
 const GameView: FunctionComponent<
   { state: appState; dispatch: (action: appEvent) => void }
 > = ({ state, dispatch }) => (
-  <Fragment>
+  <>
     <Game text={state.text} />
     <GameControls dispatch={dispatch} />
-  </Fragment>
+  </>
 );
 
 const GameControls: FunctionComponent<
@@ -42,19 +43,17 @@ const EditorView: FunctionComponent<
     setText((e.target as HTMLTextAreaElement).value);
 
   return (
-    <Fragment>
+    <>
       <Editor text={text} onChange={onChange} />
       <EditorControls cancel={cancel} save={save} />
-    </Fragment>
+    </>
   );
 };
 
 const Editor: FunctionComponent<
   { text: string; onChange: (e: Event) => void }
 > = ({ text, onChange }) => {
-  return (
-    <textarea id="editor" onChange={onChange} value={text} />
-  );
+  return <textarea id="editor" onChange={onChange} value={text} />;
 };
 
 const EditorControls: FunctionComponent<{

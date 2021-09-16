@@ -23,35 +23,23 @@ export const Game: FunctionComponent<{ text: string }> = ({ text }) => {
       dispatch({ type: "KEY_DOWN", keyboardEvent: e as KeyboardEvent }), // hmmm...
   );
 
-  return h(
-    "div",
-    { "data-mode": state.mode },
-    h(TopBar, { state, dispatch }),
-    h(GameText, { state }),
+  return (
+    <div data-mode={state.mode}>
+      <TopBar state={state} dispatch={dispatch} />
+      <GameText state={state} />
+    </div>
   );
 };
 
 const TopBar: FunctionComponent<
   { state: gameState; dispatch: (action: gameEvent) => void }
-> = ({ state, dispatch }) => {
-  return (
-    h(
-      "div",
-      { style: "min-height: 1.5rem;" },
-      state.mode === "PAUSED" && h(PausedPrompt, { dispatch }),
-      state.mode === "LOST" && h(LostPrompt, { state, dispatch }),
-      state.mode === "WON" && h(WonPrompt, { dispatch }),
-      state.mode === "PLAYING" && h(HeadsUpDisplay, { state }),
-    )
-  );
-};
-
-const HeadsUpDisplay: FunctionComponent<{ state: gameState }> = ({ state }) => (
-  h(
-    "div",
-    { className: "heads-up-display" },
-    h(ProgressIndicator, { state }),
-  )
+> = ({ state, dispatch }) => (
+  <div style="min-height: 1.5rem;">
+    {state.mode === "PAUSED" && <PausedPrompt dispatch={dispatch} />}
+    {state.mode === "LOST" && <LostPrompt state={state} dispatch={dispatch} />}
+    {state.mode === "WON" && <WonPrompt dispatch={dispatch} />}
+    {state.mode === "PLAYING" && <ProgressIndicator state={state} />}
+  </div>
 );
 
 const ProgressIndicator: FunctionComponent<{ state: gameState }> = (
@@ -60,10 +48,12 @@ const ProgressIndicator: FunctionComponent<{ state: gameState }> = (
   const ratio = state.position / state.text.length;
   const percent = Math.round(100 * ratio);
 
-  return h("strong", {}, percent + "%");
+  return (
+    <div>
+      <strong>{percent + "%"}</strong>
+    </div>
+  );
 };
-
-const nbsp = "\u00a0";
 
 const PausedPrompt: FunctionComponent<
   { dispatch: (action: gameEvent) => void }
@@ -73,64 +63,58 @@ const PausedPrompt: FunctionComponent<
     () => dispatch({ type: "RESUME" }),
   );
 
-  return h("strong", {}, "Press any key to continue.");
+  return <strong>Press any key to continue.</strong>;
 };
+
+const nbsp = "\u00a0";
 
 const LostPrompt: FunctionComponent<
   { state: gameState; dispatch: (action: gameEvent) => void }
-> = ({ state, dispatch }) => {
-  const wrongKey = state.keyOfDeath?.trim() ? `"${state.keyOfDeath}"` : "space";
-  const message = `You typed ${wrongKey}.`;
+> = ({ state, dispatch }) => (
+  <div>
+    <strong>
+      {`You typed ${state.keyOfDeath?.trim() ? `"${state.keyOfDeath}"` : "space"}.`}
+    </strong>
+    {nbsp}
+    <ResetButton dispatch={dispatch} />
+  </div>
+);
 
-  return h(
-    "div",
-    {},
-    h("strong", {}, message),
-    nbsp,
-    h(ResetButton, { dispatch }),
-  );
-};
-
-const WonPrompt: FunctionComponent<{ dispatch: (action: gameEvent) => void }> =
-  ({ dispatch }) => {
-    const message = "You succeeded!";
-
-    return h(
-      "div",
-      {},
-      h("strong", {}, message),
-      nbsp,
-      h(ResetButton, { dispatch }),
-    );
-  };
+const WonPrompt: FunctionComponent<{
+  dispatch: (action: gameEvent) => void
+}> = ({ dispatch }) => (
+  <div>
+    <strong>You succeeded!</strong>
+    {nbsp}
+    <ResetButton dispatch={dispatch} />
+  </div>
+);
 
 const ResetButton: FunctionComponent<
   { dispatch: (action: gameEvent) => void }
-> = ({ dispatch }) => {
-  const onClick = () => dispatch({ type: "RESET" });
-
-  return h("button", { onClick }, "Reset");
-};
+> = ({ dispatch }) => (
+  <button onClick={() => dispatch({ type: "RESET" })}>Reset</button>
+)
 
 const GameText: FunctionComponent<{ state: gameState }> = ({ state }) => {
   const GameChar = (char: string, index: number) => (
-    h(
-      "span",
-      {
-        className: fromClassNameList(
+    <span
+      className={
+        fromClassNameList(
           index < state.position && "typed",
           char === " " && "space",
           index === state.position && "cursor",
-        ),
-      },
-      char,
-    )
+        )
+      }
+    >
+      {char}
+    </span>
   );
 
-  return h(
-    "div",
-    { className: "text" },
-    state.text.split("").map(GameChar),
+  return (
+    <div className="text" >
+      {state.text.split("").map(GameChar)}
+    </div>
   );
 };
 

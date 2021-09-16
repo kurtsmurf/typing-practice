@@ -114,7 +114,6 @@ const reducer = (state: gameState, event: gameEvent): gameState => {
   }
 };
 
-
 export const useGameReducer = (text: string) => {
   initialState.text = text;
   return useReducer(reducer, initialState);

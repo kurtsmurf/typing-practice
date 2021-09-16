@@ -35,15 +35,6 @@ button + button {
   margin-left: .2rem;
 }
 
-.heads-up-display {
-  display: flex;
-  justify-content: space-between;
-}
-
-.caps-lock-warning {
-  color: hsl(0, 100%, 62%)
-}
-
 [data-mode="PLAYING"] .cursor,
 [data-mode="LOST"] .cursor {
   background-color: rgb(255, 224, 87);
