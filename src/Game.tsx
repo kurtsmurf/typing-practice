@@ -1,5 +1,5 @@
 import { FunctionComponent } from "preact";
-import { useEffect } from "preact/hooks";
+import { useEffect, useRef } from "preact/hooks";
 import { gameEvent, gameState, useGameReducer } from "./useGameReducer";
 import { useWindowFocusDetection } from "./useWindowFocusDetection";
 import { useWindowEventListener } from "./useWindowEventListener";
@@ -92,9 +92,15 @@ const WonPrompt: FunctionComponent<{
 
 const ResetButton: FunctionComponent<
   { dispatch: (action: gameEvent) => void }
-> = ({ dispatch }) => (
-  <button onClick={() => dispatch({ type: "RESET" })}>Reset</button>
-)
+> = ({ dispatch }) => {
+  const button = useRef<HTMLButtonElement>(null)
+
+  useEffect(() => {
+    button.current?.focus()
+  }, [button.current])
+
+  return <button ref={button} onClick={() => dispatch({ type: "RESET" })}>Reset</button>
+}
 
 const GameText: FunctionComponent<{ state: gameState }> = ({ state }) => {
   const GameChar = (char: string, index: number) => (
