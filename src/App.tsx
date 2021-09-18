@@ -1,5 +1,5 @@
 import { FunctionComponent } from "preact";
-import { useState } from "preact/hooks";
+import { useEffect, useRef, useState } from "preact/hooks";
 import { Game } from "./Game";
 import { appEvent, appState, useAppReducer } from "./useAppReducer";
 
@@ -53,7 +53,13 @@ const EditorView: FunctionComponent<
 const Editor: FunctionComponent<
   { text: string; onChange: (e: Event) => void }
 > = ({ text, onChange }) => {
-  return <textarea id="editor" onChange={onChange} value={text} />;
+  const textArea = useRef<HTMLTextAreaElement>(null)
+
+  useEffect(() => {
+    textArea.current?.focus()
+  }, [textArea.current])
+
+  return <textarea id="editor" ref={textArea} onInput={onChange} value={text} />;
 };
 
 const EditorControls: FunctionComponent<{
