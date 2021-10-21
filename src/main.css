@@ -2,6 +2,7 @@
 
 html {
   font-family: "Roboto Slab", "serif";
+  --spacing: .3rem;
 }
 
 * {
@@ -21,18 +22,23 @@ html {
   width: min(65ch, var(--max-width));
 }
 
+#editor {
+  min-width: 100%;
+  max-width: 100%;
+  min-height: min(50%, 10rem);
+}
+
 .content {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  gap: var(--spacing);
 }
 
-.content > * + * {
-  margin-top: .2rem;
-}
-
-button + button {
-  margin-left: .2rem;
+.row {
+  display: flex;
+  flex-direction: row;
+  gap: var(--spacing);
 }
 
 [data-mode="PLAYING"] .cursor,

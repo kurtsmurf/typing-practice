@@ -67,7 +67,7 @@ const EditorControls: FunctionComponent<{
   save: () => void;
 }> = ({ cancel, save }) => {
   return (
-    <div>
+    <div class="row">
       <button onClick={cancel}>Cancel</button>
       <button onClick={save}>Save</button>
     </div>
