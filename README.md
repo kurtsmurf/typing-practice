@@ -1,4 +1,6 @@
 # typing-practice
+<!-- ezgif.com-gif-maker.gif -->
+![alt text](ezgif.com-gif-maker.gif "Title")
 
 ## motivation
 
