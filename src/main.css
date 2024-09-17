@@ -3,7 +3,10 @@
 html {
   font-family: "Roboto Slab", "serif";
   --spacing: .3rem;
+  color-scheme: dark;
 }
+
+
 
 * {
   margin: 0;
@@ -41,9 +44,11 @@ html {
   gap: var(--spacing);
 }
 
+
 [data-mode="PLAYING"] .cursor,
 [data-mode="LOST"] .cursor {
-  background-color: rgb(255, 224, 87);
+  background-color: canvastext;
+  color: canvas;
   border-radius: 2px;
 }
 
