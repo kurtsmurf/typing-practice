@@ -1,7 +1,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Roboto+Slab&display=swap");
 
 html {
-  font-family: "Roboto Slab", "serif";
+  font-family: system-ui;
   --spacing: .3rem;
   color-scheme: dark;
 }
