@@ -38,7 +38,21 @@ const EditorView: FunctionComponent<
   const [text, setText] = useState(state.text);
 
   const cancel = () => dispatch({ type: "CANCEL" });
-  const save = () => dispatch({ type: "SAVE", text });
+  const save = () => {
+	  const legalChars = new Set(" zxcvbnm,./asdfghjkl;'qwertyuiop[]\\`1234567890-=ZXCVBNM<>?ASDFGHJKL:\"QWERTYUIOP{}~!@#$%^&*()_+\n\t\rs");
+    const sanitizedText = [...text].reduce((acc, cur) => legalChars.has(cur) ? acc + cur : acc);
+
+    if (sanitizedText !== text) {
+      if (window.confirm("hard-to-type characters will be removed. proceed?")) {
+        dispatch({ type: "SAVE", text: sanitizedText });        
+      } else {
+        return;
+        
+      }
+    }
+
+	  dispatch({ type: "SAVE", text: sanitizedText });
+  }
   const onChange = (e: Event) =>
     setText((e.target as HTMLTextAreaElement).value);
 
