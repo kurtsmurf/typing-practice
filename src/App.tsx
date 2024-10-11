@@ -40,14 +40,28 @@ const EditorView: FunctionComponent<
   const cancel = () => dispatch({ type: "CANCEL" });
   const save = () => {
 	  const legalChars = new Set(" zxcvbnm,./asdfghjkl;'qwertyuiop[]\\`1234567890-=ZXCVBNM<>?ASDFGHJKL:\"QWERTYUIOP{}~!@#$%^&*()_+\n\t\rs");
-    const sanitizedText = [...text].reduce((acc, cur) => legalChars.has(cur) ? acc + cur : acc);
+    let sanitizedText = "";
+    let excludedCharacters = new Set();
+
+    for (const char of text.split("")) {
+      if (legalChars.has(char)) {
+        sanitizedText += char;
+      } else {
+        excludedCharacters.add(char);
+      }
+    }
 
     if (sanitizedText !== text) {
-      if (window.confirm("hard-to-type characters will be removed. proceed?")) {
+      let excludedStr = "";
+
+      for (const char of excludedCharacters) {
+        excludedStr += char;
+      }
+
+      if (window.confirm(`All occurences of the following character(s) will be removed: ${excludedStr}`)) {
         dispatch({ type: "SAVE", text: sanitizedText });        
       } else {
         return;
-        
       }
     }
 
