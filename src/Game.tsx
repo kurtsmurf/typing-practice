@@ -14,7 +14,9 @@ export const Game: FunctionComponent<{ text: string }> = ({ text }) => {
   }, [windowHasFocus]);
 
   useEffect(() => {
-    if (state.mode === "WON") canvasConfetti();
+    const prefersReducedMotion = window.matchMedia(`(prefers-reduced-motion: reduce)`).matches === true;
+
+    if (!prefersReducedMotion && state.mode === "WON") canvasConfetti();
   }, [state.mode]);
 
   useWindowEventListener(
