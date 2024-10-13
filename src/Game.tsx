@@ -40,7 +40,7 @@ export const Game: FunctionComponent<{ text: string }> = ({ text }) => {
 const TopBar: FunctionComponent<
   { state: gameState; dispatch: (action: gameEvent) => void }
 > = ({ state, dispatch }) => (
-  <div style="min-height: 1.5rem; position: sticky; top: 0; background-color: color-mix(in srgb, canvas 90%, transparent);">
+  <div style="min-height: 1.5rem; position: sticky; top: 0; background-color: color-mix(in srgb, canvas 90%, transparent); z-index: 1;">
     {state.mode === "PAUSED" && <PausedPrompt dispatch={dispatch} />}
     {state.mode === "LOST" && <LostPrompt state={state} dispatch={dispatch} />}
     {state.mode === "WON" && <WonPrompt dispatch={dispatch} />}
