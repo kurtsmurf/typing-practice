@@ -68,8 +68,7 @@ html {
 }
 
 .typed {
-  transition: opacity 0s;
-  opacity: 0.2;
+  color: color-mix(in srgb, canvastext 20%, canvas);
 }
 
 [data-mode="LOST"] .text {
