@@ -14,7 +14,8 @@ export const Game: FunctionComponent<{ text: string }> = ({ text }) => {
   }, [windowHasFocus]);
 
   useEffect(() => {
-    const prefersReducedMotion = window.matchMedia(`(prefers-reduced-motion: reduce)`).matches === true;
+    const prefersReducedMotion =
+      window.matchMedia(`(prefers-reduced-motion: reduce)`).matches === true;
 
     if (!prefersReducedMotion && state.mode === "WON") canvasConfetti();
   }, [state.mode]);
@@ -77,7 +78,9 @@ const LostPrompt: FunctionComponent<
 > = ({ state, dispatch }) => (
   <div>
     <strong>
-      {`You typed ${state.keyOfDeath?.trim() ? `"${state.keyOfDeath}"` : "space"}.`}
+      {`You typed ${
+        state.keyOfDeath?.trim() ? `"${state.keyOfDeath}"` : "space"
+      }.`}
     </strong>
     {nbsp}
     <ResetButton dispatch={dispatch} />
@@ -85,7 +88,7 @@ const LostPrompt: FunctionComponent<
 );
 
 const WonPrompt: FunctionComponent<{
-  dispatch: (action: gameEvent) => void
+  dispatch: (action: gameEvent) => void;
 }> = ({ dispatch }) => (
   <div>
     <strong>You succeeded!</strong>
@@ -97,32 +100,34 @@ const WonPrompt: FunctionComponent<{
 const ResetButton: FunctionComponent<
   { dispatch: (action: gameEvent) => void }
 > = ({ dispatch }) => {
-  const button = useRef<HTMLButtonElement>(null)
+  const button = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
-    button.current?.focus()
-  }, [button.current])
+    button.current?.focus();
+  }, [button.current]);
 
-  return <button ref={button} onClick={() => dispatch({ type: "RESET" })}>Reset</button>
-}
+  return (
+    <button ref={button} onClick={() => dispatch({ type: "RESET" })}>
+      Reset
+    </button>
+  );
+};
 
 const GameText: FunctionComponent<{ state: gameState }> = ({ state }) => {
   const GameChar = (char: string, index: number) => (
     <span
-      className={
-        fromClassNameList(
-          index < state.position && "typed",
-          char === " " && "space",
-          index === state.position && "cursor",
-        )
-      }
+      className={fromClassNameList(
+        index < state.position && "typed",
+        char === " " && "space",
+        index === state.position && "cursor",
+      )}
     >
       {char}
     </span>
   );
 
   return (
-    <div className="text" >
+    <div className="text">
       {state.text.split("").map(GameChar)}
     </div>
   );

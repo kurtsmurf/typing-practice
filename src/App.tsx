@@ -39,7 +39,9 @@ const EditorView: FunctionComponent<
 
   const cancel = () => dispatch({ type: "CANCEL" });
   const save = () => {
-	  const legalChars = new Set(" zxcvbnm,./asdfghjkl;'qwertyuiop[]\\`1234567890-=ZXCVBNM<>?ASDFGHJKL:\"QWERTYUIOP{}~!@#$%^&*()_+\n\t\rs");
+    const legalChars = new Set(
+      " zxcvbnm,./asdfghjkl;'qwertyuiop[]\\`1234567890-=ZXCVBNM<>?ASDFGHJKL:\"QWERTYUIOP{}~!@#$%^&*()_+\n\t\rs",
+    );
     let sanitizedText = "";
     let excludedCharacters = new Set();
 
@@ -58,15 +60,19 @@ const EditorView: FunctionComponent<
         excludedStr += char;
       }
 
-      if (window.confirm(`All occurences of the following character(s) will be removed: ${excludedStr}`)) {
-        dispatch({ type: "SAVE", text: sanitizedText });        
+      if (
+        window.confirm(
+          `All occurences of the following character(s) will be removed: ${excludedStr}`,
+        )
+      ) {
+        dispatch({ type: "SAVE", text: sanitizedText });
       } else {
         return;
       }
     }
 
-	  dispatch({ type: "SAVE", text: sanitizedText });
-  }
+    dispatch({ type: "SAVE", text: sanitizedText });
+  };
   const onChange = (e: Event) =>
     setText((e.target as HTMLTextAreaElement).value);
 
@@ -81,13 +87,20 @@ const EditorView: FunctionComponent<
 const Editor: FunctionComponent<
   { text: string; onChange: (e: Event) => void }
 > = ({ text, onChange }) => {
-  const textArea = useRef<HTMLTextAreaElement>(null)
+  const textArea = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
-    textArea.current?.focus()
-  }, [textArea.current])
+    textArea.current?.focus();
+  }, [textArea.current]);
 
-  return <textarea id="editor" ref={textArea} onInput={onChange} value={text} />;
+  return (
+    <textarea
+      id="editor"
+      ref={textArea}
+      onInput={onChange}
+      value={text}
+    />
+  );
 };
 
 const EditorControls: FunctionComponent<{

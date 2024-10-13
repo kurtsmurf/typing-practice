@@ -2,11 +2,9 @@
 
 html {
   font-family: system-ui;
-  --spacing: .3rem;
+  --spacing: 0.3rem;
   color-scheme: dark;
 }
-
-
 
 * {
   margin: 0;
@@ -43,7 +41,6 @@ html {
   flex-direction: row;
   gap: var(--spacing);
 }
-
 
 [data-mode="PLAYING"] .cursor,
 [data-mode="LOST"] .cursor {
