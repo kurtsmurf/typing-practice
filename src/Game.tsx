@@ -21,8 +21,10 @@ export const Game: FunctionComponent<{ text: string }> = ({ text }) => {
 
   useWindowEventListener(
     "keydown",
-    (e: Event) =>
-      dispatch({ type: "KEY_DOWN", keyboardEvent: e as KeyboardEvent }), // hmmm...
+    (e: Event) => {
+      if (e.key === " ") e.preventDefault();
+      dispatch({ type: "KEY_DOWN", keyboardEvent: e as KeyboardEvent });
+    },
   );
 
   return (
