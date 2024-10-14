@@ -20,6 +20,22 @@ export const Game: FunctionComponent<{ text: string }> = ({ text }) => {
     if (!prefersReducedMotion && state.mode === "WON") canvasConfetti();
   }, [state.mode]);
 
+  useEffect(() => {
+    const cursor = document.querySelector(".cursor");
+    if (!cursor) return;
+    const cursorRect = cursor.getBoundingClientRect();
+    const fullyVisible = cursorRect.top >= 0 &&
+      cursorRect.left >= 0 &&
+      cursorRect.bottom <=
+        (window.innerHeight ||
+          document.documentElement.clientHeight) && /* or $(window).height() */
+      cursorRect.right <=
+        (window.innerWidth ||
+          document.documentElement.clientWidth); /* or $(window).width() */
+
+    if (!fullyVisible) cursor.scrollIntoView({ block: "center" });
+  }, [state.position]);
+
   useWindowEventListener(
     "keydown",
     (e: Event) => {
