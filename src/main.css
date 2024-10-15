@@ -71,3 +71,26 @@ html {
 [data-mode="LOST"] .text {
   filter: blur(1px);
 }
+
+progress {
+  width: 100%;
+  height: 3px;
+  -webkit-appearance: none;
+  appearance: none;
+  display: block;
+  margin: 0;
+  padding: 0;
+  border: none;
+}
+
+progress::-webkit-progress-bar {
+  background-color: transparent;
+}
+
+progress::-webkit-progress-value {
+  background-color: canvastext;
+}
+
+progress::-moz-progress-bar {
+  background-color: canvastext;
+}
