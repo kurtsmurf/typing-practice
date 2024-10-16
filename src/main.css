@@ -46,7 +46,6 @@ html {
 [data-mode="LOST"] .cursor {
   background-color: canvastext;
   color: canvas;
-  border-radius: 2px;
 }
 
 [data-mode="PLAYING"] .cursor.space::before,
@@ -54,7 +53,6 @@ html {
   content: "\00a0";
   position: absolute;
   background-color: inherit;
-  border-radius: inherit;
 }
 
 .text {
