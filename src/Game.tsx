@@ -48,7 +48,10 @@ export const Game: FunctionComponent<{ text: string }> = ({ text }) => {
   return (
     <div data-mode={state.mode}>
       <TopBar state={state} dispatch={dispatch} />
-      <GameText state={state} />
+      <div className="text-wrapper">
+        <GameText state={state} />
+        <TextForeground state={state} />
+      </div>
     </div>
   );
 };
@@ -150,6 +153,26 @@ const GameText: FunctionComponent<{ state: gameState }> = ({ state }) => {
     </div>
   );
 };
+
+const TextForeground: FunctionComponent<{ state: gameState }> = ({ state }) => {
+  const GameChar = (char: string, index: number) => (
+    <span
+      className={fromClassNameList(
+        char === " " && "space",
+        index === state.position && "cursor",
+      )}
+    >
+      {char}
+    </span>
+  );
+
+
+  return (
+    <div className="text-foreground">
+      {state.text.split("").map(GameChar)}
+    </div>
+  )
+}
 
 const fromClassNameList = (...classNames: (string | boolean)[]) => {
   return classNames.filter((n) => !!n).join(" ");

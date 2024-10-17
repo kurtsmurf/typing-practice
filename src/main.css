@@ -42,11 +42,30 @@ html {
   gap: var(--spacing);
 }
 
-[data-mode="PLAYING"] .cursor,
-[data-mode="LOST"] .cursor {
+[data-mode="PLAYING"] .cursor {
   background-color: canvastext;
   color: canvas;
 }
+
+.text-foreground span {
+  visibility: hidden;
+}
+
+.text-foreground {
+  position: absolute;
+  top: 0;
+}
+
+.text-wrapper {
+  position: relative;
+}
+
+[data-mode="LOST"] .text-foreground .cursor {
+  background-color: canvastext;
+  color: canvas;
+  visibility: visible;
+}
+
 
 [data-mode="PLAYING"] .cursor.space::before,
 [data-mode="LOST"] .cursor.space::before {
