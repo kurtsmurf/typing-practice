@@ -154,6 +154,25 @@ const GameText: FunctionComponent<{ state: gameState }> = ({ state }) => {
   );
 };
 
+/**
+ * why does this exist
+ *
+ * in order to have the cursor remain clear on lose game
+ * ie not blurred along with the rest of the text
+ * we need an un-blurred version of the cursor to show
+ * in front of the blurred text.
+ *
+ * to that end
+ * we hang a duplicate of the game text
+ * in front of the game text
+ * that is invisible mostly
+ * most of the time
+ * except for the current character
+ * which is visible when you lose
+ *
+ * @param param0
+ * @returns
+ */
 const TextForeground: FunctionComponent<{ state: gameState }> = ({ state }) => {
   const GameChar = (char: string, index: number) => (
     <span
@@ -166,13 +185,12 @@ const TextForeground: FunctionComponent<{ state: gameState }> = ({ state }) => {
     </span>
   );
 
-
   return (
     <div className="text-foreground">
       {state.text.split("").map(GameChar)}
     </div>
-  )
-}
+  );
+};
 
 const fromClassNameList = (...classNames: (string | boolean)[]) => {
   return classNames.filter((n) => !!n).join(" ");
