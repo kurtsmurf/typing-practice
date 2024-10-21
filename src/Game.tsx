@@ -40,8 +40,14 @@ export const Game: FunctionComponent<{ text: string }> = ({ text }) => {
     "keydown",
     (e: Event) => {
       // @ts-ignore
-      if (e.key === " ") e.preventDefault();
-      dispatch({ type: "KEY_DOWN", keyboardEvent: e as KeyboardEvent });
+      const isButton = e.target.tagName.toLowerCase() === "button";
+
+      // @ts-ignore
+      if (e.key === " " && !isButton) e.preventDefault();
+
+      if (!isButton) {
+        dispatch({ type: "KEY_DOWN", keyboardEvent: e as KeyboardEvent });
+      }
     },
   );
 
