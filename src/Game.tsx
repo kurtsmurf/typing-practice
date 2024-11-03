@@ -78,7 +78,7 @@ const ProgressIndicator: FunctionComponent<{ state: gameState }> = (
   { state },
 ) => {
   const ratio = state.position / state.text.length;
-  const percent = Math.round(100 * ratio);
+  const percent = Math.floor(100 * ratio);
 
   return (
     <div>
